@@ -17,7 +17,9 @@ public static class Settings
 
     public static int Height = 600;
 
-    public static int MapSize = 48;
+    public static int MapSize = 64;
+
+    public static int MapWindowSize = 48;
 
     public static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
     public static Dictionary<string, Sprite> Sprites = new Dictionary<string, Sprite>();
@@ -35,7 +37,7 @@ public static class Settings
         Width = globalSettings["Width"].GetValue<int>();
         Height = globalSettings["Height"].GetValue<int>();
         MapSize = globalSettings["MapSize"].GetValue<int>();
-        
+        MapWindowSize = globalSettings["MapWindowSize"].GetValue<int>();
     }
 
     public static void Load(ContentManager content)

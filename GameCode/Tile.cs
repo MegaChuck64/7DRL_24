@@ -6,7 +6,8 @@ namespace GameCode;
 
 public class Tile
 {
-    public Rectangle Bounds { get; set; }
+    public int X { get; set; }
+    public int Y { get; set; }
     public string SpriteName { get; set; }
     public Dictionary<string, string> Data { get; set; }
 }

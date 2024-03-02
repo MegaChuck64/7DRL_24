@@ -12,13 +12,10 @@ public class Menu
     {
         _game = game;
     }
-    public void Load(ContentManager content)
-    {
-    }
 
     public void Update(GameTime gameTime)
     {
-        if (Keyboard.GetState().IsKeyDown(Keys.Space))
+        if (_game.Input.WasPressed(Keys.Space))
         {
             _game.Scene = "map";
         }

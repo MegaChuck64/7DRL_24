@@ -4,7 +4,8 @@
     "SourceTileSize": 16,
     "Width": 1024,
     "Height": 768,
-    "MapSize": 48
+    "MapSize": 64,
+    "MapWindowSize": 48
   },
 
   "Sprites": {

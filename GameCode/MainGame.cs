@@ -10,33 +10,40 @@ namespace GameCode
         private SpriteBatch sb;
         private Menu menu;
         private Map map;
+        private MapUI mapUI;
+        public Input Input;
         public string Scene = "menu";
         public MainGame () : base(Settings.Width, Settings.Height) 
         {
             menu = new Menu(this);
-            map = new Map();
+            mapUI = new MapUI();
+            map = new Map(this);
         }
 
         protected override void LoadContent()
         {
             Settings.Load(Content);
             sb = new SpriteBatch(GraphicsDevice);
-            menu.Load(Content);
             map.Generate();
+            Input = new Input();
         }
 
         protected override void Update(GameTime gameTime)
         {
 
+            Input.Update();
+
             if (Scene == "menu")
                 menu.Update(gameTime);
-            
+            else
+                map.Update(gameTime);
 
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+
             sb.Begin(
                sortMode: SpriteSortMode.FrontToBack,
                blendState: BlendState.NonPremultiplied,
@@ -45,11 +52,15 @@ namespace GameCode
                rasterizerState: RasterizerState.CullCounterClockwise,
                effect: null,
                transformMatrix: null);
-            
+
             if (Scene == "menu")
                 menu.Draw(sb);
-            else 
+            else
+            {
                 map.Draw(sb);
+
+                mapUI.Draw(sb);
+            }
 
             sb.End();
         }
