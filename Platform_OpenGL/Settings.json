@@ -1,0 +1,26 @@
+{
+  "GlobalSettings": {
+    "TileSize": 16,
+    "SourceTileSize": 16,
+    "Width": 1024,
+    "Height": 768,
+    "MapSize": 48
+  },
+
+  "Sprites": {
+
+    "Grass": {
+      "X": 128,
+      "Y": 112,
+      "Path": "Objects/Floor"
+    },
+
+    "Water": {
+      "X": 16,
+      "Y": 144,
+      "Path": "Objects/Pit0"
+    }
+  }
+
+
+}
