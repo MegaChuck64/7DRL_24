@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GameCode;
 
@@ -16,7 +17,6 @@ public class Map
 
     private MainGame _game;
     private Point _offset = new();
-
     public Map(MainGame game)
     {
         _game = game;
@@ -25,19 +25,140 @@ public class Map
     {
         Tiles = new List<Tile>();        
         var rand = new Random();
+        var riverCount = rand.Next(4,10);
+        var rivers = new List<List<Point>>();
+        for (int i = 0; i < riverCount; i++)
+        {
+            var river = GenerateRiver(rand);
+            rivers.Add(river);
+        }
+        var radDiv = 2;
+        var radius = Settings.MapSize / radDiv;
+        var shorOffset = 0;
+
         for (int x = 0; x < Settings.MapSize; x++)
         {
             for (int y = 0; y < Settings.MapSize; y++)
             {
+                var spriteName = "Grass";
+                var dist = Vector2.Distance(new Vector2(x,y), new Vector2(Settings.MapSize/2, Settings.MapSize/2));
+                var tempRad = radius;
+                if (dist > radius)
+                {
+                    var shrOff = rand.Next(-1, 2);
+                    tempRad += shrOff;
+                }
+
+                if (dist > tempRad || rivers.Any(r => r.Contains(new Point(x, y))))
+                    spriteName = "Water";
+
                 var tile = new Tile()
                 {
                     X = x,
                     Y = y,
-                    SpriteName = rand.NextDouble() > 0.9f ? "Water" : "Grass"
+                    SpriteName = spriteName
                 };
                 Tiles.Add(tile);
             }
         }
+
+        _offset = new Point(-(Settings.MapWindowSize / (radDiv * 2)), -(Settings.MapWindowSize / (radDiv * 2)));
+    }
+
+    private static List<Point> GenerateRiver(Random rand)
+    {
+        var river = new List<Point>();
+        var _riverDir = (Direction)rand.Next(4);
+        river.Add(new Point(rand.Next(Settings.MapSize/4, (Settings.MapSize/4) * 3), rand.Next(Settings.MapSize / 4, (Settings.MapSize / 4) * 3)));
+
+        //var wall = rand.Next(4);
+        //if (wall == 0)
+        //{
+        //    river.Add(new Point(rand.Next(Settings.MapSize), 0));
+        //    _riverDir = Direction.South;
+        //}
+        //else if (wall == 1)
+        //{
+        //    river.Add(new Point(Settings.MapSize - 1, rand.Next(Settings.MapSize)));
+        //    _riverDir = Direction.West;
+        //}
+        //else if (wall == 2)
+        //{
+        //    river.Add(new Point(rand.Next(Settings.MapSize), Settings.MapSize - 1));
+        //    _riverDir = Direction.North;
+        //}
+        //else if (wall == 3)
+        //{
+        //    river.Add(new Point(0, rand.Next(Settings.MapSize)));
+        //    _riverDir = Direction.East;
+        //}
+
+        var steps = 1000;
+        for (int i = 0; i < steps; i++)
+        {
+            var last = river.Last();
+            var count = 0;
+            do
+            {
+                var nextdir = rand.Next(3);                
+                var next = NextRiverLoc(_riverDir, nextdir);
+                next += last;
+                if (next.X >= 0 && next.Y >= 0 && next.X < Settings.MapSize - 1 && next.Y < Settings.MapSize && !river.Contains(next))
+                {
+                    river.Add(next);
+                    break;
+                }
+
+                if (count++ > 1000)
+                    break;
+
+            } while (true);
+        }
+
+        return river;
+    }
+
+    private static Point NextRiverLoc(Direction dir, int choice)
+    {
+        if (dir == Direction.North)
+        {
+            if (choice == 0)
+                return new Point(0, -1);
+            else if (choice == 1)
+                return new Point(1, 0);
+            else if (choice == 2)
+                return new Point(-1, 0);
+        }
+        else if (dir == Direction.East)
+        {
+            if (choice == 0)
+                return new Point(1, 0);
+            else if (choice == 1)
+                return new Point(0, 1);
+            else if (choice == 2)
+                return new Point(0, -1);
+        }
+        else if (dir == Direction.South)
+        {
+            if (choice == 0)
+                return new Point(0, 1);
+            else if (choice == 1)
+                return new Point(-1, 0);
+            else if (choice == 2)
+                return new Point(1, 0);
+        }
+        else if (dir == Direction.West)
+        {
+            if (choice == 0)
+                return new Point(-1, 0);
+            else if (choice == 1)
+                return new Point(0, -1);
+            else if (choice == 2)
+                return new Point(0, 1);
+        }
+
+        
+        return Point.Zero;
     }
 
     public void Update(GameTime gt)
@@ -92,5 +213,14 @@ public class Map
                     color: Color.White);
             }
         }
+    }
+
+    public enum Direction
+    {
+        North,
+        East,
+        South,
+        West
+
     }
 }
