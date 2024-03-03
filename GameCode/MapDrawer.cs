@@ -10,6 +10,7 @@ public class MapDrawer
     public Point Offset { get; set; }
     private WaterLoader _waterLoader = new ();
     private GrassLoader _grassLoader = new();
+    private SandLoader _sandLoader = new();
     public void Draw(Map map, SpriteBatch sb)
     {
         Offset = new Point(-map.Player.X + (Settings.MapWindowSize / 2), -map.Player.Y + (Settings.MapWindowSize / 2));
@@ -89,6 +90,7 @@ public class MapDrawer
         {
             "Grass" => (SpriteInfo?)_grassLoader.GetInfo(tile.Option),
             "Water" => (SpriteInfo?)_waterLoader.GetInfo(tile.Option),
+            "Sand" => (SpriteInfo?)_sandLoader.GetInfo(tile.Option),
             _ => null,
         };
     

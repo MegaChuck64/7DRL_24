@@ -5,15 +5,26 @@
     "Width": 1024,
     "Height": 768,
     "MapSize": 64,
-    "MapWindowSize": 32
+    "MapWindowSize": 24
   },
 
   "Sprites": [
     "Sprites/water/shallow_water",
     "Sprites/water/shallow_water2",
+    
     "Sprites/floor/grass/grass0",
     "Sprites/floor/grass/grass1",
     "Sprites/floor/grass/grass2",
+
+    "Sprites/floor/sand1",
+    "Sprites/floor/sand2",
+    "Sprites/floor/sand3",
+    "Sprites/floor/sand4",
+    "Sprites/floor/sand5",
+    "Sprites/floor/sand6",
+    "Sprites/floor/sand7",
+    "Sprites/floor/sand8",
+
     "Sprites/player/base/human_m",
     "Sprites/player/base/human_f"
   ]

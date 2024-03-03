@@ -15,12 +15,14 @@ public class Map
 
     private WaterLoader _waterLoader;
     private GrassLoader _grassLoader;
+    private SandLoader _sandLoader;
 
     public Map(MainGame game)
     {
         _game = game;
         _waterLoader = new WaterLoader();
         _grassLoader = new GrassLoader();
+        _sandLoader = new SandLoader();
     }
     public void Generate()
     {
@@ -40,6 +42,7 @@ public class Map
         var shorOffset = 0;
         var grassOptions = _grassLoader.GetOptionCount();
         var waterOptions = _waterLoader.GetOptionCount();
+        var sandOptions = _sandLoader.GetOptionCount();
 
         for (int x = 0; x < Settings.MapSize; x++)
         {
@@ -52,7 +55,7 @@ public class Map
                 var tempRad = radius;
                 if (dist > radius)
                 {
-                    shorOffset += rand.Next(-1, 2);                    
+                    shorOffset += rand.Next(-2, 3);                    
                     tempRad += shorOffset;
                     if (tempRad > radius)
                         tempRad = radius;
@@ -62,6 +65,11 @@ public class Map
                 {
                     spriteName = "Water";
                     option = rand.Next(waterOptions);
+                }
+                else if (dist > tempRad * .75f)
+                {
+                    spriteName = "Sand";
+                    option = rand.Next(sandOptions);
                 }
                 var tile = new Tile()
                 {
