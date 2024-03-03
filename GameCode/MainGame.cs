@@ -38,7 +38,7 @@ namespace GameCode
             if (Scene == "menu")
                 menu.Update(gameTime);
             else
-                map.Update(gameTime);
+                map.Player.Update(this, map, gameTime);
 
         }
 
@@ -61,7 +61,6 @@ namespace GameCode
             {
                 var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 mapDrawer.Draw(map, sb);
-
                 mapUI.Draw(sb, dt);
             }
 

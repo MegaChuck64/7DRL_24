@@ -5,7 +5,7 @@ namespace GameCode;
 
 public class MapDrawer
 {
-    private Rectangle _tempRect = new Rectangle();
+    private Rectangle _tempRect = new();
     public Point Offset { get; set; }
     public void Draw(Map map, SpriteBatch sb)
     {
@@ -85,20 +85,21 @@ public class MapDrawer
 
             if (tile.X == map.Player.X && tile.Y == map.Player.Y)
             {
-                var src = _tempRect;
-                src.X = plSpr.X;
-                src.Y = plSpr.Y;
-                src.Width = Settings.SourceTileSize;
-                src.Height = Settings.SourceTileSize;
-                sb.Draw(
-                    texture: plTxt,
-                    destinationRectangle: dst,
-                    sourceRectangle: src,
-                    color: Color.White,
-                    rotation: 0f,
-                    origin: Vector2.Zero,
-                    effects: SpriteEffects.None,
-                    layerDepth: 0.2f);
+                //var src = _tempRect;
+                //src.X = plSpr.X;
+                //src.Y = plSpr.Y;
+                //src.Width = Settings.SourceTileSize;
+                //src.Height = Settings.SourceTileSize;
+                //sb.Draw(
+                //    texture: plTxt,
+                //    destinationRectangle: dst,
+                //    sourceRectangle: src,
+                //    color: Color.White,
+                //    rotation: 0f,
+                //    origin: Vector2.Zero,
+                //    effects: SpriteEffects.None,
+                //    layerDepth: 0.2f);
+                map.Player.Draw(dst, sb);
             }
 
         }

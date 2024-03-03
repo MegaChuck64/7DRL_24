@@ -12,13 +12,16 @@ public class Map
     public List<Tile> Tiles { get; set; }
 
     private MainGame _game;
-    public Point Player = new(Settings.MapSize/2, Settings.MapSize/2);
+    public Player Player { get; set; }
+
     public Map(MainGame game)
     {
         _game = game;
     }
     public void Generate()
     {
+        Player = new Player();
+
         Tiles = new List<Tile>();        
         var rand = new Random();
         var riverCount = rand.Next(4,10);
@@ -136,38 +139,6 @@ public class Map
         return Point.Zero;
     }
 
-    public void Update(GameTime gt)
-    {
-
-        var next = Player;
-        if (_game.Input.WasPressed(Keys.D))
-        {   
-            if (next.X < Settings.MapSize - 1)
-                next.X++;
-        }
-        if (_game.Input.WasPressed(Keys.A))
-        {   
-            if (next.X > 0)
-                next.X--;
-        }
-        if (_game.Input.WasPressed(Keys.W))
-        {
-            if (next.Y > 0)
-                next.Y--;
-        }
-        if (_game.Input.WasPressed(Keys.S))
-        {      
-            if (next.Y < Settings.MapSize - 1)
-                next.Y++;
-        }
-
-        if (next != Player)
-        {
-            if (!Tiles.Any(t => t.X == next.X && t.Y == next.Y && t.SpriteName == "Water"))
-                Player = next;
-        }
-
-    }
 
     
 
