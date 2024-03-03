@@ -19,6 +19,38 @@ public class MapDrawer
         winRect.Width = Settings.MapWindowSize;
         winRect.Height = Settings.MapWindowSize;
 
+        var wtrSpr = Settings.Sprites["Water"];
+        var wtrTxt = Settings.Textures[wtrSpr.Path];
+        var wtrSrc = _tempRect;
+        wtrSrc.X = wtrSpr.X;
+        wtrSrc.Y = wtrSpr.Y;
+        wtrSrc.Width = Settings.SourceTileSize;
+        wtrSrc.Height = Settings.SourceTileSize;
+
+        for (int x = 0; x < Settings.MapWindowSize; x++)
+        {
+            for (int y = 0; y < Settings.MapWindowSize; y++)
+            {
+                var dst = _tempRect;
+
+                dst.X = x * Settings.TileSize;
+                dst.Y = y * Settings.TileSize;
+                dst.Width = Settings.TileSize;
+                dst.Height = Settings.TileSize;
+
+                sb.Draw(
+                  texture: wtrTxt,
+                  destinationRectangle: dst,
+                  sourceRectangle: wtrSrc,
+                  color: Color.White,
+                  rotation: 0f,
+                  origin: Vector2.Zero,
+                  effects: SpriteEffects.None,
+                  layerDepth: 0.0f);
+
+            }
+        }
+
         foreach (var tile in map.Tiles)
         {
             var dst = _tempRect;
@@ -40,7 +72,15 @@ public class MapDrawer
                 src.Width = Settings.SourceTileSize;
                 src.Height = Settings.SourceTileSize;
 
-                sb.Draw(tileTxt, dst, src, Color.White);
+                sb.Draw(
+                  texture: tileTxt,
+                  destinationRectangle: dst,
+                  sourceRectangle: src,
+                  color: Color.White,
+                  rotation: 0f,
+                  origin: Vector2.Zero,
+                  effects: SpriteEffects.None,
+                  layerDepth: 0.1f);
             }
 
             if (tile.X == map.Player.X && tile.Y == map.Player.Y)
@@ -58,7 +98,7 @@ public class MapDrawer
                     rotation: 0f,
                     origin: Vector2.Zero,
                     effects: SpriteEffects.None,
-                    layerDepth: 0.1f);
+                    layerDepth: 0.2f);
             }
 
         }
