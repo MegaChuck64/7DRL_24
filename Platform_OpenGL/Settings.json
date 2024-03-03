@@ -1,33 +1,22 @@
 {
   "GlobalSettings": {
-    "TileSize": 24,
-    "SourceTileSize": 16,
+    "TileSize": 32,
+    "SourceTileSize": 32,
     "Width": 1024,
     "Height": 768,
     "MapSize": 64,
     "MapWindowSize": 32
   },
 
-  "Sprites": {
-
-    "Grass": {
-      "X": 128,
-      "Y": 112,
-      "Path": "Objects/Floor"
-    },
-
-    "Water": {
-      "X": 16,
-      "Y": 144,
-      "Path": "Objects/Pit0"
-    },
-
-    "Player": {
-      "X": 0,
-      "Y": 0,
-      "Path":  "Characters/Player0"
-    }
-  }
+  "Sprites": [
+    "Sprites/water/shallow_water",
+    "Sprites/water/shallow_water2",
+    "Sprites/floor/grass/grass0",
+    "Sprites/floor/grass/grass1",
+    "Sprites/floor/grass/grass2",
+    "Sprites/player/base/human_m",
+    "Sprites/player/base/human_f"
+  ]
 
 
 }

@@ -9,6 +9,7 @@ public class Tile
     public int X { get; set; }
     public int Y { get; set; }
     public string SpriteName { get; set; }
+    public int Option { get; set; }
     public Dictionary<string, string> Data { get; set; }
 }
 

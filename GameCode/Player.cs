@@ -1,20 +1,24 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameCode.Sprites;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Linq;
 
 namespace GameCode;
 
 public class Player : Actor
 {
-    private Sprite _sprite = Settings.Sprites["Player"];
     private Texture2D _texture;
-    private Rectangle _sourceRect;
 
     public Player()
     {
-        _texture = Settings.Textures[_sprite.Path];
-        _sourceRect = new Rectangle(_sprite.X, _sprite.Y, Settings.SourceTileSize, Settings.SourceTileSize);
+        var rand = new Random();
+        var playerLoader = new PlayerLoader();
+        var options = playerLoader.GetOptionCount();
+        var option = rand.Next(options);
+        var spriteInfo = playerLoader.GetInfo(option);
+        _texture = Settings.Textures[spriteInfo.TextureName];
         X = Settings.MapSize / 2;
         Y = Settings.MapSize / 2;
     }
@@ -24,7 +28,7 @@ public class Player : Actor
         sb.Draw(
             texture: _texture,
             destinationRectangle: dst,
-            sourceRectangle: _sourceRect,
+            sourceRectangle: null,
             color: Color.White,
             rotation: 0f,
             origin: Vector2.Zero,

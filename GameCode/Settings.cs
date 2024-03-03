@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
+using System.Linq;
 using System.Text.Json.Nodes;
 
 namespace GameCode;
@@ -22,7 +22,6 @@ public static class Settings
     public static int MapWindowSize = 48;
 
     public static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
-    public static Dictionary<string, Sprite> Sprites = new Dictionary<string, Sprite>();
     public static Dictionary<string, SpriteFont> Fonts = new Dictionary<string, SpriteFont>();
     public static void Init()
     {
@@ -45,23 +44,17 @@ public static class Settings
         var fl = File.ReadAllText("Settings.json");
 
         var json = JsonNode.Parse(fl);
-
-        //textures
-        Textures.Add("Objects/Floor", content.Load<Texture2D>(Path.Combine("Sprites", "DawnLike", "Objects", "Floor")));
-        Textures.Add("Objects/Pit0", content.Load<Texture2D>(Path.Combine("Sprites", "DawnLike", "Objects", "Pit0")));
-        Textures.Add("Characters/Player0", content.Load<Texture2D>(Path.Combine("Sprites", "DawnLike", "Characters", "Player0")));
-
-        var sprites = json["Sprites"];
-        Sprites = sprites.Deserialize<Dictionary<string, Sprite>>();
+        var sprites = json["Sprites"] as JsonArray;
+        foreach (var spr in sprites)
+        {
+            var val = spr.GetValue<string>();
+            var splt = val.Split('/', System.StringSplitOptions.TrimEntries | System.StringSplitOptions.RemoveEmptyEntries);
+            var name = splt.Last();
+            var text = content.Load<Texture2D>(Path.Combine(splt));
+            Textures.Add(name, text);
+        }
 
         Fonts.Add("font_18", content.Load<SpriteFont>(Path.Combine("Fonts", "font_18")));
     }
 
-}
-
-public class Sprite
-{
-    public string Path { get; set; }
-    public int X { get; set; }
-    public int Y { get; set; }
 }

@@ -1,6 +1,5 @@
-﻿using GameCode;
+﻿using GameCode.Sprites;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +13,14 @@ public class Map
     private MainGame _game;
     public Player Player { get; set; }
 
+    private WaterLoader _waterLoader;
+    private GrassLoader _grassLoader;
+
     public Map(MainGame game)
     {
         _game = game;
+        _waterLoader = new WaterLoader();
+        _grassLoader = new GrassLoader();
     }
     public void Generate()
     {
@@ -34,12 +38,16 @@ public class Map
         var radDiv = 2;
         var radius = Settings.MapSize / radDiv;
         var shorOffset = 0;
+        var grassOptions = _grassLoader.GetOptionCount();
+        var waterOptions = _waterLoader.GetOptionCount();
 
         for (int x = 0; x < Settings.MapSize; x++)
         {
             for (int y = 0; y < Settings.MapSize; y++)
             {
                 var spriteName = "Grass";
+                var option = 0;
+                option = rand.Next(grassOptions);
                 var dist = Vector2.Distance(new Vector2(x,y), new Vector2(Settings.MapSize/2, Settings.MapSize/2));
                 var tempRad = radius;
                 if (dist > radius)
@@ -51,13 +59,16 @@ public class Map
                 }
 
                 if (dist > tempRad || rivers.Any(r => r.Contains(new Point(x, y))))
+                {
                     spriteName = "Water";
-
+                    option = rand.Next(waterOptions);
+                }
                 var tile = new Tile()
                 {
                     X = x,
                     Y = y,
-                    SpriteName = spriteName
+                    SpriteName = spriteName,
+                    Option = option,
                 };
                 Tiles.Add(tile);
             }
