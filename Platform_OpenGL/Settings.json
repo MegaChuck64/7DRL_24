@@ -1,11 +1,11 @@
 {
   "GlobalSettings": {
-    "TileSize": 16,
+    "TileSize": 24,
     "SourceTileSize": 16,
     "Width": 1024,
     "Height": 768,
     "MapSize": 64,
-    "MapWindowSize": 48
+    "MapWindowSize": 32
   },
 
   "Sprites": {
@@ -20,6 +20,12 @@
       "X": 16,
       "Y": 144,
       "Path": "Objects/Pit0"
+    },
+
+    "Player": {
+      "X": 0,
+      "Y": 0,
+      "Path":  "Characters/Player0"
     }
   }
 

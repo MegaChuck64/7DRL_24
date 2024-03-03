@@ -10,6 +10,7 @@ namespace GameCode
         private SpriteBatch sb;
         private Menu menu;
         private Map map;
+        private MapDrawer mapDrawer;
         private MapUI mapUI;
         public Input Input;
         public string Scene = "menu";
@@ -18,6 +19,7 @@ namespace GameCode
             menu = new Menu(this);
             mapUI = new MapUI();
             map = new Map(this);
+            mapDrawer = new MapDrawer();
         }
 
         protected override void LoadContent()
@@ -58,7 +60,7 @@ namespace GameCode
             else
             {
                 var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                map.Draw(sb);
+                mapDrawer.Draw(map, sb);
 
                 mapUI.Draw(sb, dt);
             }

@@ -49,6 +49,7 @@ public static class Settings
         //textures
         Textures.Add("Objects/Floor", content.Load<Texture2D>(Path.Combine("Sprites", "DawnLike", "Objects", "Floor")));
         Textures.Add("Objects/Pit0", content.Load<Texture2D>(Path.Combine("Sprites", "DawnLike", "Objects", "Pit0")));
+        Textures.Add("Characters/Player0", content.Load<Texture2D>(Path.Combine("Sprites", "DawnLike", "Characters", "Player0")));
 
         var sprites = json["Sprites"];
         Sprites = sprites.Deserialize<Dictionary<string, Sprite>>();
