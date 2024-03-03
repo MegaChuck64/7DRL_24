@@ -16,6 +16,7 @@ public class Map
     private WaterLoader _waterLoader;
     private GrassLoader _grassLoader;
     private SandLoader _sandLoader;
+    private TreeLoader _treeLoader;
 
     public Map(MainGame game)
     {
@@ -23,6 +24,7 @@ public class Map
         _waterLoader = new WaterLoader();
         _grassLoader = new GrassLoader();
         _sandLoader = new SandLoader();
+        _treeLoader = new TreeLoader();
     }
     public void Generate()
     {
@@ -43,6 +45,7 @@ public class Map
         var grassOptions = _grassLoader.GetOptionCount();
         var waterOptions = _waterLoader.GetOptionCount();
         var sandOptions = _sandLoader.GetOptionCount();
+        var treeOptions = _treeLoader.GetOptionCount();
 
         for (int x = 0; x < Settings.MapSize; x++)
         {
@@ -53,6 +56,7 @@ public class Map
                 option = rand.Next(grassOptions);
                 var dist = Vector2.Distance(new Vector2(x,y), new Vector2(Settings.MapSize/2, Settings.MapSize/2));
                 var tempRad = radius;
+                var data = new Dictionary<string, string>();
                 if (dist > radius)
                 {
                     shorOffset += rand.Next(-2, 3);                    
@@ -65,18 +69,33 @@ public class Map
                 {
                     spriteName = "Water";
                     option = rand.Next(waterOptions);
+                    data.Add("Collider", "True");
                 }
                 else if (dist > tempRad * .75f)
                 {
                     spriteName = "Sand";
                     option = rand.Next(sandOptions);
                 }
+                else if (rand.NextDouble() > 0.97f)
+                {
+                    var treeTile = new Tile()
+                    {
+                        X = x,
+                        Y = y,
+                        SpriteName = "Tree",
+                        Option = rand.Next(treeOptions),
+                        Data = new Dictionary<string, string> { { "Layer", "Object"}, { "Collider", "True"} }
+                    };
+                    Tiles.Add(treeTile);
+                }
+
                 var tile = new Tile()
                 {
                     X = x,
                     Y = y,
                     SpriteName = spriteName,
                     Option = option,
+                    Data = data,
                 };
                 Tiles.Add(tile);
             }

@@ -11,6 +11,7 @@ public class MapDrawer
     private WaterLoader _waterLoader = new ();
     private GrassLoader _grassLoader = new();
     private SandLoader _sandLoader = new();
+    private TreeLoader _treeLoader = new();
     public void Draw(Map map, SpriteBatch sb)
     {
         Offset = new Point(-map.Player.X + (Settings.MapWindowSize / 2), -map.Player.Y + (Settings.MapWindowSize / 2));
@@ -61,6 +62,11 @@ public class MapDrawer
             if (winRect.Contains(tile.X + Offset.X, tile.Y + Offset.Y))
             {
                 var tileSpr = GetTileInfo(tile);
+                var layer = 0.1f;
+                if (tile?.Data.TryGetValue("Layer", out string layerVal) ?? false)
+                {
+                    layer = layerVal == "Object" ? 0.2f : 0.1f;
+                }
                 if (tileSpr != null)
                 {
                     var tileTxt = Settings.Textures[tileSpr.Value.TextureName];
@@ -72,7 +78,7 @@ public class MapDrawer
                       rotation: 0f,
                       origin: Vector2.Zero,
                       effects: SpriteEffects.None,
-                      layerDepth: 0.1f);
+                      layerDepth: layer);
                 }
             }
 
@@ -91,6 +97,7 @@ public class MapDrawer
             "Grass" => (SpriteInfo?)_grassLoader.GetInfo(tile.Option),
             "Water" => (SpriteInfo?)_waterLoader.GetInfo(tile.Option),
             "Sand" => (SpriteInfo?)_sandLoader.GetInfo(tile.Option),
+            "Tree" => (SpriteInfo?)_treeLoader.GetInfo(tile.Option),
             _ => null,
         };
     

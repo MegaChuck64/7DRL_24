@@ -46,17 +46,17 @@ public class Player : Actor
             if (next.X < Settings.MapSize - 1)
                 next.X++;
         }
-        if (game.Input.WasPressed(Keys.A))
+        else if (game.Input.WasPressed(Keys.A))
         {
             if (next.X > 0)
                 next.X--;
         }
-        if (game.Input.WasPressed(Keys.W))
+        else if (game.Input.WasPressed(Keys.W))
         {
             if (next.Y > 0)
                 next.Y--;
         }
-        if (game.Input.WasPressed(Keys.S))
+        else if (game.Input.WasPressed(Keys.S))
         {
             if (next.Y < Settings.MapSize - 1)
                 next.Y++;
@@ -64,7 +64,7 @@ public class Player : Actor
 
         if (next != new Point(X, Y))
         {
-            if (!map.Tiles.Any(t => t.X == next.X && t.Y == next.Y && t.SpriteName == "Water"))
+            if (!map.Tiles.Any(t => t.X == next.X && t.Y == next.Y && t.Data.ContainsKey("Collider") && t.Data["Collider"] == "True"))
             {
                 X = next.X;
                 Y = next.Y;

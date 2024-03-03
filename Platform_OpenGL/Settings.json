@@ -11,7 +11,7 @@
   "Sprites": [
     "Sprites/water/shallow_water",
     "Sprites/water/shallow_water2",
-    
+
     "Sprites/floor/grass/grass0",
     "Sprites/floor/grass/grass1",
     "Sprites/floor/grass/grass2",
@@ -24,6 +24,10 @@
     "Sprites/floor/sand6",
     "Sprites/floor/sand7",
     "Sprites/floor/sand8",
+
+    "Sprites/trees/mangrove1",
+    "Sprites/trees/mangrove2",
+    "Sprites/trees/mangrove3",
 
     "Sprites/player/base/human_m",
     "Sprites/player/base/human_f"
