@@ -1,21 +1,15 @@
 ﻿using GameCode;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace GameCode;
 
 public class Map
 {
     public List<Tile> Tiles { get; set; }
-    //private Rectangle _sourceTempRect   = new(0, 0, Settings.SourceTileSize, Settings.SourceTileSize);
-    //private Rectangle _worldTempRect    = new(0, 0, Settings.TileSize, Settings.TileSize);
-    //private Rectangle _tileTempRect     = new(0, 0, 1, 1);
-    //private Rectangle _windowRect       = new(0, 0, Settings.MapWindowSize, Settings.MapWindowSize);
 
     private MainGame _game;
     public Point Player = new(Settings.MapSize/2, Settings.MapSize/2);
@@ -144,31 +138,34 @@ public class Map
 
     public void Update(GameTime gt)
     {
-        var mapDif = Settings.MapSize - Settings.MapWindowSize;
 
+        var next = Player;
         if (_game.Input.WasPressed(Keys.D))
         {   
-            if (Player.X < Settings.MapSize - 1)
-                Player.X++;
+            if (next.X < Settings.MapSize - 1)
+                next.X++;
         }
         if (_game.Input.WasPressed(Keys.A))
         {   
-            if (Player.X > 0)
-                Player.X--;
+            if (next.X > 0)
+                next.X--;
         }
         if (_game.Input.WasPressed(Keys.W))
         {
-            if (Player.Y > 0)
-                Player.Y--;
+            if (next.Y > 0)
+                next.Y--;
         }
         if (_game.Input.WasPressed(Keys.S))
         {      
-            if (Player.Y < Settings.MapSize - 1)
-                Player.Y++;
+            if (next.Y < Settings.MapSize - 1)
+                next.Y++;
         }
 
-        
-
+        if (next != Player)
+        {
+            if (!Tiles.Any(t => t.X == next.X && t.Y == next.Y && t.SpriteName == "Water"))
+                Player = next;
+        }
 
     }
 
@@ -183,39 +180,3 @@ public class Map
 
     }
 }
-
-//var mapDif = Settings.MapSize - Settings.MapWindowSize;
-
-//        if (_game.Input.WasPressed(Keys.D))
-//        {
-//            if (_offset.X > -mapDif)
-//                _offset.X--;
-            
-//            if (Player.X<Settings.MapSize - 1)
-//                Player.X++;
-//        }
-//        if (_game.Input.WasPressed(Keys.A))
-//{
-//    if (_offset.X < 0)
-//        _offset.X++;
-
-//    if (Player.X > 0)
-//        Player.X--;
-//}
-//if (_game.Input.WasPressed(Keys.W))
-//{
-//    if (_offset.Y < 0)
-//        _offset.Y++;
-
-//    if (Player.Y > 0)
-//        Player.Y--;
-//}
-//if (_game.Input.WasPressed(Keys.S))
-//{
-//    if (_offset.Y > -mapDif)
-//        _offset.Y--;
-
-//    if (Player.Y < Settings.MapSize - 1)
-//        Player.Y++;
-//}
-//    }
