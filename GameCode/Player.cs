@@ -21,6 +21,8 @@ public class Player : Actor
         _texture = Settings.Textures[spriteInfo.TextureName];
         X = Settings.MapSize / 2;
         Y = Settings.MapSize / 2;
+
+        Health = 20;
     }
 
     public void Draw(Rectangle dst, SpriteBatch sb)
@@ -72,4 +74,5 @@ public class Player : Actor
         }
 
     }
+
 }

@@ -61,7 +61,7 @@ namespace GameCode
             {
                 var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 mapDrawer.Draw(map, sb);
-                mapUI.Draw(sb, dt);
+                mapUI.Draw(sb, dt, map);
             }
 
             sb.End();

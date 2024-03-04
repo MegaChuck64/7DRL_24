@@ -4,7 +4,7 @@
     "SourceTileSize": 32,
     "Width": 1024,
     "Height": 768,
-    "MapSize": 64,
+    "MapSize": 256,
     "MapWindowSize": 24
   },
 

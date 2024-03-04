@@ -71,12 +71,12 @@ public class Map
                     option = rand.Next(waterOptions);
                     data.Add("Collider", "True");
                 }
-                else if (dist > tempRad * .75f)
+                else if (dist > tempRad * .85f)
                 {
                     spriteName = "Sand";
                     option = rand.Next(sandOptions);
                 }
-                else if (rand.NextDouble() > 0.97f)
+                else if (rand.NextDouble() > 0.95f)
                 {
                     var treeTile = new Tile()
                     {
@@ -101,6 +101,26 @@ public class Map
             }
         }
 
+    }
+
+
+
+    private static bool[,] GetCollisionMap(Map map)
+    {
+        var colM = new bool[Settings.Width, Settings.Height];
+        for (int x = 0; x < Settings.Width; x++)
+        {
+            for (int y = 0; y < Settings.Height; y++)
+            {
+                var canMove = true;
+                if (map.Tiles.Any(r => r.X == x && r.Y == y && r.Data.ContainsKey("Collider") && r.Data["Collider"] == "True"))
+                {
+                    canMove = false;
+                }
+                colM[x, y] = canMove;
+            }
+        }
+        return colM;
     }
 
     private static List<Point> GenerateRiver(Random rand)

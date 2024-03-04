@@ -15,24 +15,9 @@ public class Tile
 
 public class Actor : Tile
 {
-    public MovementType MovementType { get; set; }
+    public string Name { get; set; }
+    public int Health { get; set; }
 
-    public Alignment Alignment { get; set; }
 }
 
 
-
-public enum MovementType
-{
-    Static,
-    PlayerControlled,
-    LineOfSight,
-    Pathfinding,
-}
-
-public enum Alignment
-{
-    Good,
-    Neutral,
-    Bad
-}
