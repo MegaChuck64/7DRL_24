@@ -9,7 +9,7 @@ namespace GameCode;
 
 public class Player : Actor
 {
-    private Texture2D _texture;
+    private readonly Texture2D _texture;
 
     public Player()
     {

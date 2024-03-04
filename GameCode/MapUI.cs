@@ -6,7 +6,7 @@ namespace GameCode;
 
 public class MapUI
 {
-    public void Draw(SpriteBatch sb, float dt, Map map)
+    public void Draw(MainGame game, SpriteBatch sb, float dt, Map map)
     {
         var font = Settings.Fonts["font_18"];
 
@@ -24,5 +24,19 @@ public class MapUI
         var healthPos = new Vector2((Settings.MapWindowSize * Settings.TileSize) + 2, Settings.Height - fpsSize.Y - 4 - healthSize.Y - 2);
 
         sb.DrawString(font, healthText, healthPos, Color.White);
+
+
+        var uiRect = new Rectangle(
+            Settings.MapWindowSize * Settings.TileSize, 
+            0, 
+            Settings.Width -  (Settings.MapWindowSize * Settings.TileSize),
+            Settings.Height);
+
+        var mousePos = game.Input.MouseState.Position;
+        if (uiRect.Contains(mousePos))
+        {
+            var cursorText = Settings.Textures["halo"];
+            sb.Draw(cursorText, mousePos.ToVector2(), Color.White);
+        }
     }
 }

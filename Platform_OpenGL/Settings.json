@@ -30,7 +30,10 @@
     "Sprites/trees/mangrove3",
 
     "Sprites/player/base/human_m",
-    "Sprites/player/base/human_f"
+    "Sprites/player/base/human_f",
+
+    "Sprites/misc/cursor",
+    "Sprites/misc/halo"
   ]
 
 

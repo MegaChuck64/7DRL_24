@@ -1,6 +1,8 @@
 ﻿using GameCode.Sprites;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace GameCode;
 
@@ -12,10 +14,15 @@ public class MapDrawer
     private GrassLoader _grassLoader = new();
     private SandLoader _sandLoader = new();
     private TreeLoader _treeLoader = new();
-    public void Draw(Map map, SpriteBatch sb)
+
+
+    public void Draw(MainGame game, Map map, SpriteBatch sb)
     {
         Offset = new Point(-map.Player.X + (Settings.MapWindowSize / 2), -map.Player.Y + (Settings.MapWindowSize / 2));
-
+        var mousePos = game.Input.MouseState.Position;
+        var mouseTilePos = new Point(mousePos.X / Settings.TileSize, mousePos.Y / Settings.TileSize);
+        //mouseTilePos.X += Offset.X;
+        //mouseTilePos.Y += Offset.Y;
 
         var wtrSpr = _waterLoader.GetInfo();
         var wtrTxt = Settings.Textures[wtrSpr.TextureName];
@@ -80,6 +87,21 @@ public class MapDrawer
                       effects: SpriteEffects.None,
                       layerDepth: layer);
                 }
+
+                if (tile.X + Offset.X == mouseTilePos.X && tile.Y + Offset.Y == mouseTilePos.Y)
+                {
+                    var cursorTxt = Settings.Textures["cursor"];
+                    sb.Draw(
+                      texture: cursorTxt,
+                      destinationRectangle: dst,
+                      sourceRectangle: null,
+                      color: Color.White,
+                      rotation: 0f,
+                      origin: Vector2.Zero,
+                      effects: SpriteEffects.None,
+                      layerDepth: layer + 0.1f);
+                }
+
             }
 
             if (tile.X == map.Player.X && tile.Y == map.Player.Y)

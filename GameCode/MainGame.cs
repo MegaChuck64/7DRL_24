@@ -20,6 +20,8 @@ namespace GameCode
             mapUI = new MapUI();
             map = new Map(this);
             mapDrawer = new MapDrawer();
+
+            IsMouseVisible = false;
         }
 
         protected override void LoadContent()
@@ -60,8 +62,8 @@ namespace GameCode
             else
             {
                 var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                mapDrawer.Draw(map, sb);
-                mapUI.Draw(sb, dt, map);
+                mapDrawer.Draw(this, map, sb);
+                mapUI.Draw(this, sb, dt, map);
             }
 
             sb.End();
