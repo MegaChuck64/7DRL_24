@@ -1,5 +1,4 @@
-﻿using GameCode.Sprites;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,43 +8,29 @@ namespace GameCode;
 public class Map
 {
     public List<Tile> Tiles { get; set; }
-
-    private MainGame _game;
     public Player Player { get; set; }
 
-    private WaterLoader _waterLoader;
-    private GrassLoader _grassLoader;
-    private SandLoader _sandLoader;
-    private TreeLoader _treeLoader;
+    private Random _rand;
 
-    public Map(MainGame game)
+    public Map()
     {
-        _game = game;
-        _waterLoader = new WaterLoader();
-        _grassLoader = new GrassLoader();
-        _sandLoader = new SandLoader();
-        _treeLoader = new TreeLoader();
     }
     public void Generate()
     {
         Player = new Player();
 
         Tiles = new List<Tile>();        
-        var rand = new Random();
-        var riverCount = rand.Next(4,10);
+        _rand = new Random();
+        var riverCount = _rand.Next(4,10);
         var rivers = new List<List<Point>>();
         for (int i = 0; i < riverCount; i++)
         {
-            var river = GenerateRiver(rand);
+            var river = GenerateRiver(_rand);
             rivers.Add(river);
         }
         var radDiv = 2;
         var radius = Settings.MapSize / radDiv;
         var shorOffset = 0;
-        var grassOptions = _grassLoader.GetOptionCount();
-        var waterOptions = _waterLoader.GetOptionCount();
-        var sandOptions = _sandLoader.GetOptionCount();
-        var treeOptions = _treeLoader.GetOptionCount();
 
         for (int x = 0; x < Settings.MapSize; x++)
         {
@@ -53,13 +38,15 @@ public class Map
             {
                 var spriteName = "Grass";
                 var option = 0;
-                option = rand.Next(grassOptions);
+                
+                option = GetRandomSpriteOption("Grass");
+                
                 var dist = Vector2.Distance(new Vector2(x,y), new Vector2(Settings.MapSize/2, Settings.MapSize/2));
                 var tempRad = radius;
                 var data = new Dictionary<string, string>();
                 if (dist > radius)
                 {
-                    shorOffset += rand.Next(-2, 3);                    
+                    shorOffset += _rand.Next(-2, 3);                    
                     tempRad += shorOffset;
                     if (tempRad > radius)
                         tempRad = radius;
@@ -68,22 +55,22 @@ public class Map
                 if (dist > tempRad || rivers.Any(r => r.Contains(new Point(x, y))))
                 {
                     spriteName = "Water";
-                    option = rand.Next(waterOptions);
+                    option = GetRandomSpriteOption(spriteName);
                     data.Add("Collider", "True");
                 }
                 else if (dist > tempRad * .85f)
                 {
                     spriteName = "Sand";
-                    option = rand.Next(sandOptions);
+                    option = GetRandomSpriteOption(spriteName);
                 }
-                else if (rand.NextDouble() > 0.95f)
+                else if (_rand.NextDouble() > 0.95f)
                 {
                     var treeTile = new Tile()
                     {
                         X = x,
                         Y = y,
                         SpriteName = "Tree",
-                        Option = rand.Next(treeOptions),
+                        Option = GetRandomSpriteOption("Tree"),
                         Data = new Dictionary<string, string> { { "Layer", "Object"}, { "Collider", "True"} }
                     };
                     Tiles.Add(treeTile);
@@ -103,7 +90,10 @@ public class Map
 
     }
 
-
+    private int GetRandomSpriteOption(string spriteName)
+    {
+        return _rand.Next(Settings.Sprites[spriteName].Count);
+    }
 
     private static bool[,] GetCollisionMap(Map map)
     {

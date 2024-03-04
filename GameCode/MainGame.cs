@@ -18,7 +18,7 @@ namespace GameCode
         {
             menu = new Menu(this);
             mapUI = new MapUI();
-            map = new Map(this);
+            map = new Map();
             mapDrawer = new MapDrawer();
 
             IsMouseVisible = false;
@@ -71,3 +71,7 @@ namespace GameCode
 
     }
 }
+/*
+ Change how loading works.
+Instead of manually making different loaders, make only hardcoded options in json, and have a single loader object 
+ */

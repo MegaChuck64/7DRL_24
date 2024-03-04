@@ -1,5 +1,4 @@
-﻿using GameCode.Sprites;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -14,11 +13,9 @@ public class Player : Actor
     public Player()
     {
         var rand = new Random();
-        var playerLoader = new PlayerLoader();
-        var options = playerLoader.GetOptionCount();
-        var option = rand.Next(options);
-        var spriteInfo = playerLoader.GetInfo(option);
-        _texture = Settings.Textures[spriteInfo.TextureName];
+        var option = rand.Next(Settings.Sprites["Human"].Count);
+        var sprite = Settings.Sprites["Human"][option];
+        _texture = Settings.Textures[sprite];
         X = Settings.MapSize / 2;
         Y = Settings.MapSize / 2;
 

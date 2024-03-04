@@ -1,8 +1,5 @@
-﻿using GameCode.Sprites;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 
 namespace GameCode;
 
@@ -10,11 +7,6 @@ public class MapDrawer
 {
     private Rectangle _tempRect = new();
     public Point Offset { get; set; }
-    private WaterLoader _waterLoader = new ();
-    private GrassLoader _grassLoader = new();
-    private SandLoader _sandLoader = new();
-    private TreeLoader _treeLoader = new();
-
 
     public void Draw(MainGame game, Map map, SpriteBatch sb)
     {
@@ -24,8 +16,8 @@ public class MapDrawer
         //mouseTilePos.X += Offset.X;
         //mouseTilePos.Y += Offset.Y;
 
-        var wtrSpr = _waterLoader.GetInfo();
-        var wtrTxt = Settings.Textures[wtrSpr.TextureName];
+        var wtrSpr = Settings.Sprites["Water"];
+        var wtrTxt = Settings.Textures[wtrSpr[0]];
 
         for (int x = 0; x < Settings.MapWindowSize; x++)
         {
@@ -68,7 +60,7 @@ public class MapDrawer
 
             if (winRect.Contains(tile.X + Offset.X, tile.Y + Offset.Y))
             {
-                var tileSpr = GetTileInfo(tile);
+                var tileSpr = Settings.Sprites[tile.SpriteName];
                 var layer = 0.1f;
                 if (tile?.Data.TryGetValue("Layer", out string layerVal) ?? false)
                 {
@@ -76,7 +68,7 @@ public class MapDrawer
                 }
                 if (tileSpr != null)
                 {
-                    var tileTxt = Settings.Textures[tileSpr.Value.TextureName];
+                    var tileTxt = Settings.Textures[tileSpr[tile.Option]];
                     sb.Draw(
                       texture: tileTxt,
                       destinationRectangle: dst,
@@ -112,16 +104,4 @@ public class MapDrawer
         }
 
     }
-
-    private SpriteInfo? GetTileInfo(Tile tile) =>
-        tile.SpriteName switch
-        {
-            "Grass" => (SpriteInfo?)_grassLoader.GetInfo(tile.Option),
-            "Water" => (SpriteInfo?)_waterLoader.GetInfo(tile.Option),
-            "Sand" => (SpriteInfo?)_sandLoader.GetInfo(tile.Option),
-            "Tree" => (SpriteInfo?)_treeLoader.GetInfo(tile.Option),
-            _ => null,
-        };
-    
-
 }

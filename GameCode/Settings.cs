@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace GameCode;
@@ -22,6 +23,7 @@ public static class Settings
     public static int MapWindowSize = 48;
 
     public static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
+    public static Dictionary<string, List<string>> Sprites = new Dictionary<string, List<string>>();
     public static Dictionary<string, SpriteFont> Fonts = new Dictionary<string, SpriteFont>();
     public static void Init()
     {
@@ -44,8 +46,8 @@ public static class Settings
         var fl = File.ReadAllText("Settings.json");
 
         var json = JsonNode.Parse(fl);
-        var sprites = json["Sprites"] as JsonArray;
-        foreach (var spr in sprites)
+        var textures = json["Textures"] as JsonArray;
+        foreach (var spr in textures)
         {
             var val = spr.GetValue<string>();
             var splt = val.Split('/', System.StringSplitOptions.TrimEntries | System.StringSplitOptions.RemoveEmptyEntries);
@@ -54,7 +56,21 @@ public static class Settings
             Textures.Add(name, text);
         }
 
+        var sprites = json["Sprites"];
+        Sprites = sprites.Deserialize<Dictionary<string, List<string>>>();
+
         Fonts.Add("font_18", content.Load<SpriteFont>(Path.Combine("Fonts", "font_18")));
     }
-
 }
+
+//public struct SpriteInfo
+//{
+//    public string TextureName { get; set; }
+//    public string Name { get; set; }
+
+//    public SpriteInfo(string textureName, string name)
+//    {
+//        TextureName = textureName;
+//        Name = name;
+//    }
+//}

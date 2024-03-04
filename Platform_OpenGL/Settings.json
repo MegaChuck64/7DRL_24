@@ -8,7 +8,7 @@
     "MapWindowSize": 24
   },
 
-  "Sprites": [
+  "Textures": [
     "Sprites/water/shallow_water",
     "Sprites/water/shallow_water2",
 
@@ -34,7 +34,42 @@
 
     "Sprites/misc/cursor",
     "Sprites/misc/halo"
-  ]
+  ],
 
+  "Sprites": {
+
+    "Water": [
+      "shallow_water",
+      "shallow_water2"
+    ],
+    "Grass": [
+      "grass0",
+      "grass1",
+      "grass2"
+    ],
+    "Sand": [
+      "sand1",
+      "sand2",
+      "sand3",
+      "sand4",
+      "sand5",
+      "sand6",
+      "sand7",
+      "sand8"
+    ],
+    "Tree": [
+      "mangrove1",
+      "mangrove2",
+      "mangrove3"
+    ],
+    "Human": [
+      "human_m",
+      "human_f"
+    ],
+    "Cursor": [
+      "cursor",
+      "halo"
+    ]
+  }
 
 }
