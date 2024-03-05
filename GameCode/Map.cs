@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ public class Map
 
     private Random _rand;
 
+    public Tile SelectedTile { get; set; }
     public Map()
     {
     }
@@ -19,9 +21,9 @@ public class Map
     {
         Player = new Player();
 
-        Tiles = new List<Tile>();        
+        Tiles = new List<Tile>();
         _rand = new Random();
-        var riverCount = _rand.Next(4,10);
+        var riverCount = _rand.Next(4, 10);
         var rivers = new List<List<Point>>();
         for (int i = 0; i < riverCount; i++)
         {
@@ -38,15 +40,15 @@ public class Map
             {
                 var spriteName = "Grass";
                 var option = 0;
-                
+
                 option = GetRandomSpriteOption("Grass");
-                
-                var dist = Vector2.Distance(new Vector2(x,y), new Vector2(Settings.MapSize/2, Settings.MapSize/2));
+
+                var dist = Vector2.Distance(new Vector2(x, y), new Vector2(Settings.MapSize / 2, Settings.MapSize / 2));
                 var tempRad = radius;
                 var data = new Dictionary<string, string>();
                 if (dist > radius)
                 {
-                    shorOffset += _rand.Next(-2, 3);                    
+                    shorOffset += _rand.Next(-2, 3);
                     tempRad += shorOffset;
                     if (tempRad > radius)
                         tempRad = radius;
@@ -71,7 +73,7 @@ public class Map
                         Y = y,
                         SpriteName = "Tree",
                         Option = GetRandomSpriteOption("Tree"),
-                        Data = new Dictionary<string, string> { { "Layer", "Object"}, { "Collider", "True"} }
+                        Data = new Dictionary<string, string> { { "Layer", "Object" }, { "Collider", "True" } }
                     };
                     Tiles.Add(treeTile);
                 }
@@ -88,8 +90,68 @@ public class Map
             }
         }
 
+        PlaceWelcomeScroll();
+
+
+
     }
 
+    private void PlaceWelcomeScroll()
+    {
+        var scrollRadiusFromPlayer = 5;
+        var rect = new Rectangle(
+            Player.X - scrollRadiusFromPlayer, 
+            Player.Y - scrollRadiusFromPlayer, 
+            scrollRadiusFromPlayer * 2, 
+            scrollRadiusFromPlayer * 2);
+
+        var nearby = GetTilesInRect(rect);
+        var grass = nearby.Where(t => t.SpriteName == "Grass");
+        var emptyGrass = grass.Where(t => nearby.Count(c => c.X == t.X && c.Y == t.Y) == 1);
+
+        if (!emptyGrass.Any())
+        {
+            throw new Exception("Todo: no empty grass near player");
+        }
+        var choice = emptyGrass.ElementAt(_rand.Next(emptyGrass.Count()));
+
+        var path = PathFinder.GetPath(new Point(Player.X, Player.Y), new Point(choice.X, choice.Y), GetCollisionMap(this));
+        if (path == null || path.Count == 0)
+        {
+            throw new Exception("Todo: can't reach chosen grass");
+        }
+
+        var treeTile = new Tile()
+        {
+            X = choice.X,
+            Y = choice.X,
+            SpriteName = "Scroll",
+            Option = GetRandomSpriteOption("Scroll"),
+            Data = new Dictionary<string, string> { { "Layer", "Object" }, { "Collider", "True" } }
+        };
+        Tiles.Add(treeTile);
+    }
+
+    private List<Tile> GetTilesInRect(Rectangle rect)
+    {
+        var tiles = new List<Tile>();
+
+        var startX = rect.X;
+        var endX = rect.X + rect.Width;
+        var startY = rect.Y;
+        var endY = rect.Y + rect.Height;
+
+        for (int x = startX; x < endX; x++)
+        {
+            for (int y = startY; y < endY; y++)
+            {
+                var tls = Tiles.Where(t => t.X == x && t.Y == y);
+                tiles.AddRange(tls);
+            }
+        }
+
+        return tiles;
+    }
     private int GetRandomSpriteOption(string spriteName)
     {
         return _rand.Next(Settings.Sprites[spriteName].Count);
@@ -97,17 +159,20 @@ public class Map
 
     private static bool[,] GetCollisionMap(Map map)
     {
-        var colM = new bool[Settings.Width, Settings.Height];
-        for (int x = 0; x < Settings.Width; x++)
+        var colM = new bool[Settings.MapSize, Settings.MapSize];
+        for (int x = 0; x < Settings.MapSize; x++)
         {
-            for (int y = 0; y < Settings.Height; y++)
+            for (int y = 0; y < Settings.MapSize; y++)
+            {      
+                colM[x, y] = true;
+            }
+        }
+
+        foreach (var tile in map.Tiles)
+        {            
+            if (tile.Data.ContainsKey("Collider") && tile.Data["Collider"] == "True")
             {
-                var canMove = true;
-                if (map.Tiles.Any(r => r.X == x && r.Y == y && r.Data.ContainsKey("Collider") && r.Data["Collider"] == "True"))
-                {
-                    canMove = false;
-                }
-                colM[x, y] = canMove;
+                colM[tile.X, tile.Y] = false;
             }
         }
         return colM;

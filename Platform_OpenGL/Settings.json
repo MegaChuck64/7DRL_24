@@ -33,9 +33,19 @@
     "Sprites/player/base/human_f",
 
     "Sprites/misc/cursor",
-    "Sprites/misc/halo"
-  ],
+    "Sprites/misc/halo",
 
+    "Sprites/item/scroll/scroll",
+    "Sprites/item/scroll/scroll-blue",
+    "Sprites/item/scroll/scroll-brown",
+    "Sprites/item/scroll/scroll-cyan",
+    "Sprites/item/scroll/scroll-green",
+    "Sprites/item/scroll/scroll-grey",
+    "Sprites/item/scroll/scroll-purple",
+    "Sprites/item/scroll/scroll-red",
+    "Sprites/item/scroll/scroll-yellow"
+  ],                            
+                                
   "Sprites": {
 
     "Water": [
@@ -69,6 +79,17 @@
     "Cursor": [
       "cursor",
       "halo"
+    ],
+    "Scroll": [
+      "scroll",
+      "scroll-blue",
+      "scroll-brown",
+      "scroll-cyan",
+      "scroll-green",
+      "scroll-grey",
+      "scroll-purple",
+      "scroll-red",
+      "scroll-yellow"
     ]
   }
 

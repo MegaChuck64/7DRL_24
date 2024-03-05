@@ -26,6 +26,11 @@ public class MapUI
         sb.DrawString(font, healthText, healthPos, Color.White);
 
 
+        var tileInfo = map.SelectedTile?.SpriteName ?? string.Empty;        
+        var tileInfoPos = new Vector2((Settings.MapWindowSize * Settings.TileSize) + 2, 4);
+        sb.DrawString(font, tileInfo, tileInfoPos, Color.Yellow);
+
+
         var uiRect = new Rectangle(
             Settings.MapWindowSize * Settings.TileSize, 
             0, 

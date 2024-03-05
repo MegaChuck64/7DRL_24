@@ -49,6 +49,7 @@ public class MapDrawer
         winRect.Width = Settings.MapWindowSize;
         winRect.Height = Settings.MapWindowSize;
 
+        map.SelectedTile = null;
         foreach (var tile in map.Tiles)
         {
             var dst = _tempRect;
@@ -92,6 +93,11 @@ public class MapDrawer
                       origin: Vector2.Zero,
                       effects: SpriteEffects.None,
                       layerDepth: layer + 0.1f);
+
+                    if (map.SelectedTile == null || (tile.Data.ContainsKey("Layer") && tile.Data["Layer"] == "Object"))
+                    {
+                        map.SelectedTile = tile;
+                    }
                 }
 
             }
