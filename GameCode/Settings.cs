@@ -60,5 +60,7 @@ public static class Settings
         Sprites = sprites.Deserialize<Dictionary<string, List<string>>>();
 
         Fonts.Add("font_18", content.Load<SpriteFont>(Path.Combine("Fonts", "font_18")));
+        Fonts.Add("font_12", content.Load<SpriteFont>(Path.Combine("Fonts", "font_12")));
+        Fonts.Add("font_8", content.Load<SpriteFont>(Path.Combine("Fonts", "font_8")));
     }
 }

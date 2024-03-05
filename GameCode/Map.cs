@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace GameCode;
 
@@ -20,8 +21,6 @@ public class Map
     }
     public void Generate()
     {
-        Player = new Player();
-
         Tiles = new Tile[Settings.MapSize, Settings.MapSize];
         Items = new List<Tile>();
 
@@ -93,30 +92,15 @@ public class Map
             }
         }
 
+        var startTile = GetRandomEmptyTileInRange(10, Settings.MapSize / 2, Settings.MapSize / 2);
+        Player = new Player(startTile.X, startTile.Y);
+
         PlaceWelcomeScroll();
-
-
-
     }
 
     private void PlaceWelcomeScroll()
     {
-        var scrollRadiusFromPlayer = 5;
-        var rect = new Rectangle(
-            Player.X - scrollRadiusFromPlayer, 
-            Player.Y - scrollRadiusFromPlayer, 
-            scrollRadiusFromPlayer * 2, 
-            scrollRadiusFromPlayer * 2);
-
-        var nearby = GetTilesInRect(rect);
-        var grass = nearby.Where(t => t.SpriteName == "Grass");
-        var emptyGrass = grass.Where(t => !Items.Any(i=>i.X == t.X && i.Y == t.Y));
-
-        if (!emptyGrass.Any())
-        {
-            throw new Exception("Todo: no empty grass near player");
-        }
-        var choice = emptyGrass.ElementAt(_rand.Next(emptyGrass.Count()));
+        var choice = GetRandomEmptyTileInRange(5, Player.X, Player.Y);
 
         var path = PathFinder.GetPath(new Point(Player.X, Player.Y), new Point(choice.X, choice.Y), GetCollisionMap(this));
         if (path == null || path.Count == 0)
@@ -133,6 +117,29 @@ public class Map
             Data = new List<string> { "Object", "Collectable"}
         };
         Items.Add(scrollTile);
+    }
+
+    private Tile GetRandomEmptyTileInRange(int range, int x, int y)
+    {
+        var empty = GetEmptyTilesInRange(range, x, y);
+        var choice = _rand.Next(empty.Count);
+        var tile = empty.ElementAt(choice);
+        return Tiles[tile.X, tile.Y];
+    }
+    private List<Tile> GetEmptyTilesInRange(int range, int x, int y)
+    {
+        var tiles = new List<Tile>();
+        var rect = new Rectangle(
+           x - range,
+           y - range,
+           range * 2,
+           range * 2);
+
+        var nearby = GetTilesInRect(rect);
+        var empty = nearby.Where(t => !Items.Any(i => i.X == t.X && i.Y == t.Y) && !t.Data.Contains("Collider"));
+        tiles.AddRange(empty);
+
+        return tiles;
     }
 
     private List<Tile> GetTilesInRect(Rectangle rect)
