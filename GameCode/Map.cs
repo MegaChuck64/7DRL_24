@@ -8,7 +8,8 @@ namespace GameCode;
 
 public class Map
 {
-    public List<Tile> Tiles { get; set; }
+    public Tile[,] Tiles { get; set; }
+    public List<Tile> Items { get; set; }
     public Player Player { get; set; }
 
     private Random _rand;
@@ -21,7 +22,9 @@ public class Map
     {
         Player = new Player();
 
-        Tiles = new List<Tile>();
+        Tiles = new Tile[Settings.MapSize, Settings.MapSize];
+        Items = new List<Tile>();
+
         _rand = new Random();
         var riverCount = _rand.Next(4, 10);
         var rivers = new List<List<Point>>();
@@ -45,7 +48,7 @@ public class Map
 
                 var dist = Vector2.Distance(new Vector2(x, y), new Vector2(Settings.MapSize / 2, Settings.MapSize / 2));
                 var tempRad = radius;
-                var data = new Dictionary<string, string>();
+                var data = new List<string>();
                 if (dist > radius)
                 {
                     shorOffset += _rand.Next(-2, 3);
@@ -58,7 +61,7 @@ public class Map
                 {
                     spriteName = "Water";
                     option = GetRandomSpriteOption(spriteName);
-                    data.Add("Collider", "True");
+                    data.Add("Collider");
                 }
                 else if (dist > tempRad * .85f)
                 {
@@ -73,9 +76,9 @@ public class Map
                         Y = y,
                         SpriteName = "Tree",
                         Option = GetRandomSpriteOption("Tree"),
-                        Data = new Dictionary<string, string> { { "Layer", "Object" }, { "Collider", "True" } }
+                        Data = new List<string> { "Object", "Collider"}
                     };
-                    Tiles.Add(treeTile);
+                    Items.Add(treeTile);
                 }
 
                 var tile = new Tile()
@@ -86,7 +89,7 @@ public class Map
                     Option = option,
                     Data = data,
                 };
-                Tiles.Add(tile);
+                Tiles[x,y] = tile;
             }
         }
 
@@ -107,7 +110,7 @@ public class Map
 
         var nearby = GetTilesInRect(rect);
         var grass = nearby.Where(t => t.SpriteName == "Grass");
-        var emptyGrass = grass.Where(t => nearby.Count(c => c.X == t.X && c.Y == t.Y) == 1);
+        var emptyGrass = grass.Where(t => !Items.Any(i=>i.X == t.X && i.Y == t.Y));
 
         if (!emptyGrass.Any())
         {
@@ -121,15 +124,15 @@ public class Map
             throw new Exception("Todo: can't reach chosen grass");
         }
 
-        var treeTile = new Tile()
+        var scrollTile = new Tile()
         {
             X = choice.X,
             Y = choice.X,
             SpriteName = "Scroll",
             Option = GetRandomSpriteOption("Scroll"),
-            Data = new Dictionary<string, string> { { "Layer", "Object" }, { "Collider", "True" } }
+            Data = new List<string> { "Object", "Collectable"}
         };
-        Tiles.Add(treeTile);
+        Items.Add(scrollTile);
     }
 
     private List<Tile> GetTilesInRect(Rectangle rect)
@@ -145,19 +148,20 @@ public class Map
         {
             for (int y = startY; y < endY; y++)
             {
-                var tls = Tiles.Where(t => t.X == x && t.Y == y);
-                tiles.AddRange(tls);
+                tiles.Add(Tiles[x,y]);
             }
         }
 
         return tiles;
     }
+
+
     private int GetRandomSpriteOption(string spriteName)
     {
         return _rand.Next(Settings.Sprites[spriteName].Count);
     }
 
-    private static bool[,] GetCollisionMap(Map map)
+    public static bool[,] GetCollisionMap(Map map)
     {
         var colM = new bool[Settings.MapSize, Settings.MapSize];
         for (int x = 0; x < Settings.MapSize; x++)
@@ -165,12 +169,16 @@ public class Map
             for (int y = 0; y < Settings.MapSize; y++)
             {      
                 colM[x, y] = true;
+                if (map.Tiles[x,y].Data.Contains("Collider"))
+                {
+                    colM[x, y] = false;
+                }
             }
         }
 
-        foreach (var tile in map.Tiles)
+        foreach (var tile in map.Items)
         {            
-            if (tile.Data.ContainsKey("Collider") && tile.Data["Collider"] == "True")
+            if (tile.Data.Contains("Collider"))
             {
                 colM[tile.X, tile.Y] = false;
             }

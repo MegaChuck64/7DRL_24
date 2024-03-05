@@ -10,7 +10,7 @@ public class Tile
     public int Y { get; set; }
     public string SpriteName { get; set; }
     public int Option { get; set; }
-    public Dictionary<string, string> Data { get; set; } = new Dictionary<string, string>();
+    public List<string> Data { get; set; } = new List<string>();
 }
 
 public class Actor : Tile

@@ -13,12 +13,11 @@ public class MapDrawer
         Offset = new Point(-map.Player.X + (Settings.MapWindowSize / 2), -map.Player.Y + (Settings.MapWindowSize / 2));
         var mousePos = game.Input.MouseState.Position;
         var mouseTilePos = new Point(mousePos.X / Settings.TileSize, mousePos.Y / Settings.TileSize);
-        //mouseTilePos.X += Offset.X;
-        //mouseTilePos.Y += Offset.Y;
 
         var wtrSpr = Settings.Sprites["Water"];
         var wtrTxt = Settings.Textures[wtrSpr[0]];
 
+        //make off map just water
         for (int x = 0; x < Settings.MapWindowSize; x++)
         {
             for (int y = 0; y < Settings.MapWindowSize; y++)
@@ -50,6 +49,7 @@ public class MapDrawer
         winRect.Height = Settings.MapWindowSize;
 
         map.SelectedTile = null;
+
         foreach (var tile in map.Tiles)
         {
             var dst = _tempRect;
@@ -62,11 +62,9 @@ public class MapDrawer
             if (winRect.Contains(tile.X + Offset.X, tile.Y + Offset.Y))
             {
                 var tileSpr = Settings.Sprites[tile.SpriteName];
-                var layer = 0.1f;
-                if (tile?.Data.TryGetValue("Layer", out string layerVal) ?? false)
-                {
-                    layer = layerVal == "Object" ? 0.2f : 0.1f;
-                }
+                var layer = tile.Data.Contains("Object") ? 0.2f : 0.1f;
+                
+                //tiles
                 if (tileSpr != null)
                 {
                     var tileTxt = Settings.Textures[tileSpr[tile.Option]];
@@ -81,6 +79,8 @@ public class MapDrawer
                       layerDepth: layer);
                 }
 
+
+                //cursor
                 if (tile.X + Offset.X == mouseTilePos.X && tile.Y + Offset.Y == mouseTilePos.Y)
                 {
                     var cursorTxt = Settings.Textures["cursor"];
@@ -94,10 +94,8 @@ public class MapDrawer
                       effects: SpriteEffects.None,
                       layerDepth: layer + 0.1f);
 
-                    if (map.SelectedTile == null || (tile.Data.ContainsKey("Layer") && tile.Data["Layer"] == "Object"))
-                    {
-                        map.SelectedTile = tile;
-                    }
+                    
+                    map.SelectedTile = tile;                    
                 }
 
             }
@@ -107,6 +105,37 @@ public class MapDrawer
                 map.Player.Draw(dst, sb);
             }
 
+        }
+
+        foreach (var item in map.Items)
+        {
+            if (winRect.Contains(item.X + Offset.X, item.Y + Offset.Y))
+            {
+                var dst = _tempRect;
+
+                dst.X = (item.X + Offset.X) * Settings.TileSize;
+                dst.Y = (item.Y + Offset.Y) * Settings.TileSize;
+                dst.Width = Settings.TileSize;
+                dst.Height = Settings.TileSize;
+
+                var itmSpr = Settings.Sprites[item.SpriteName];
+                var itmTxt = Settings.Textures[itmSpr[item.Option]];
+                var layer = item.Data.Contains("Object") ? 0.2f : 0.1f;
+
+                sb.Draw(
+                  texture: itmTxt,
+                  destinationRectangle: dst,
+                  sourceRectangle: null,
+                  color: Color.White,
+                  rotation: 0f,
+                  origin: Vector2.Zero,
+                  effects: SpriteEffects.None,
+                  layerDepth: layer);
+
+
+                if (map.SelectedTile != null && map.SelectedTile.X == item.X && map.SelectedTile.Y == item.Y)
+                    map.SelectedTile = item;
+            }
         }
 
     }

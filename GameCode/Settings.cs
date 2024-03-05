@@ -62,15 +62,3 @@ public static class Settings
         Fonts.Add("font_18", content.Load<SpriteFont>(Path.Combine("Fonts", "font_18")));
     }
 }
-
-//public struct SpriteInfo
-//{
-//    public string TextureName { get; set; }
-//    public string Name { get; set; }
-
-//    public SpriteInfo(string textureName, string name)
-//    {
-//        TextureName = textureName;
-//        Name = name;
-//    }
-//}
