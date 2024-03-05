@@ -1,6 +1,7 @@
 ﻿using Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace GameCode
 {
@@ -36,6 +37,27 @@ namespace GameCode
         {
 
             Input.Update();
+
+            if (Input.IsDown(Keys.LeftControl))
+            {
+                if (Input.WasPressed(Keys.OemPlus))
+                {
+                    if (Settings.TileSize < 48)
+                    {                        
+                        Settings.TileSize += 16;
+                        Settings.MapWindowSize = Settings.MapPixelWidth / Settings.TileSize;
+                    }
+                }
+                else if (Input.WasPressed(Keys.OemMinus))
+                {
+                    if (Settings.TileSize > 16)
+                    {
+                        Settings.TileSize -= 16;
+                        Settings.MapWindowSize = Settings.MapPixelWidth / Settings.TileSize;
+                    }
+                }
+            }
+
 
             if (Scene == "menu")
                 menu.Update(gameTime);

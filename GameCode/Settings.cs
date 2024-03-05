@@ -22,6 +22,8 @@ public static class Settings
 
     public static int MapWindowSize = 48;
 
+    public static int MapPixelWidth { get; private set; }
+
     public static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
     public static Dictionary<string, List<string>> Sprites = new Dictionary<string, List<string>>();
     public static Dictionary<string, SpriteFont> Fonts = new Dictionary<string, SpriteFont>();
@@ -39,6 +41,7 @@ public static class Settings
         Height = globalSettings["Height"].GetValue<int>();
         MapSize = globalSettings["MapSize"].GetValue<int>();
         MapWindowSize = globalSettings["MapWindowSize"].GetValue<int>();
+        MapPixelWidth = MapWindowSize * TileSize;
     }
 
     public static void Load(ContentManager content)
