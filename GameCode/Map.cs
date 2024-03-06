@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace GameCode;
 
@@ -114,7 +113,7 @@ public class Map
             Y = choice.X,
             SpriteName = "Scroll",
             Option = GetRandomSpriteOption("Scroll"),
-            Data = new List<string> { "Object", "Collectable"}
+            Data = new List<string> { "Object", "Collectable", $"Description-{Settings.WelcomeMessage}"}
         };
         Items.Add(scrollTile);
     }

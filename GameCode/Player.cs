@@ -10,7 +10,7 @@ namespace GameCode;
 public class Player : Actor
 {
     private readonly Texture2D _texture;
-    public List<string> Inventory { get; set; }
+    public List<Tile> Inventory { get; private set; }
     public Player(int x, int y)
     {
         var rand = new Random();
@@ -20,8 +20,19 @@ public class Player : Actor
         X = x;// Settings.MapSize / 2;
         Y = y;// Settings.MapSize / 2;
 
-        Inventory = new List<string>();
+        Inventory = new List<Tile>();        
         Health = 20;
+    }
+
+    public bool TryAddInventoryItem(Tile item)
+    {
+        if (Inventory.Count < 10)
+        {
+            Inventory.Add(item);
+            return true;
+        }
+
+        return false;
     }
 
     public void Draw(Rectangle dst, SpriteBatch sb)
@@ -61,10 +72,18 @@ public class Player : Actor
                     Y = next.Y;
 
                     var collectables = map.Items.Where(t => t.X == X && t.Y == Y && t.Data.Contains("Collectable"));
+                    var removables = new List<Tile>();
                     if (collectables.Any())
                     {
-                        Inventory.AddRange(collectables.Select(t => t.SpriteName));
-                        map.Items.RemoveAll(r => collectables.Contains(r));
+                        foreach (var item in collectables)
+                        {
+                            if (TryAddInventoryItem(item))
+                            {
+                                removables.Add(item);
+                            }
+                        }
+
+                        map.Items.RemoveAll(c=>removables.Contains(c));
                     }
                 }
                 

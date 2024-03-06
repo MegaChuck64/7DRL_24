@@ -5,7 +5,8 @@
     "Width": 1024,
     "Height": 768,
     "MapSize": 256,
-    "MapWindowSize": 24
+    "MapWindowSize": 24,
+    "WelcomeMessage": "Welcome to Hollow World! \nRoll to move around the map. \nBuy items in stores to help in fights.\nWinning fights will provide item drops."
   },
 
   "Textures": [

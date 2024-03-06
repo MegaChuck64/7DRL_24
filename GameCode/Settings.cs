@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -21,7 +23,7 @@ public static class Settings
     public static int MapSize = 64;
 
     public static int MapWindowSize = 48;
-
+    public static string WelcomeMessage = string.Empty;
     public static int MapPixelWidth { get; private set; }
 
     public static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
@@ -41,10 +43,11 @@ public static class Settings
         Height = globalSettings["Height"].GetValue<int>();
         MapSize = globalSettings["MapSize"].GetValue<int>();
         MapWindowSize = globalSettings["MapWindowSize"].GetValue<int>();
+        WelcomeMessage = globalSettings["WelcomeMessage"].GetValue<string>();
         MapPixelWidth = MapWindowSize * TileSize;
     }
 
-    public static void Load(ContentManager content)
+    public static void Load(ContentManager content, GraphicsDevice graphicsDevice)
     {
         var fl = File.ReadAllText("Settings.json");
 
@@ -65,5 +68,9 @@ public static class Settings
         Fonts.Add("font_18", content.Load<SpriteFont>(Path.Combine("Fonts", "font_18")));
         Fonts.Add("font_12", content.Load<SpriteFont>(Path.Combine("Fonts", "font_12")));
         Fonts.Add("font_8", content.Load<SpriteFont>(Path.Combine("Fonts", "font_8")));
+
+        var txt = new Texture2D(graphicsDevice, 1, 1);
+        txt.SetData(new Color[] { Color.White });
+        Textures["pixel"] = txt;
     }
 }

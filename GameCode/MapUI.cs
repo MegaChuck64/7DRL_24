@@ -39,7 +39,7 @@ public class MapUI
         var cnt = 1;
         foreach (var item in inventory)
         {
-            var invTx = $"{cnt++}. {item}";
+            var invTx = $"{cnt++}. {item.SpriteName}";
             y += healthSize.Y + 4 + 2;
             invPos.Y = y;
             sb.DrawString(font8, invTx, invPos, Color.White);

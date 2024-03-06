@@ -13,6 +13,7 @@ namespace GameCode
         private Map map;
         private MapDrawer mapDrawer;
         private MapUI mapUI;
+        private InventoryMenu inventoryMenu;
         public Input Input;
         public string Scene = "menu";
         public MainGame () : base(Settings.Width, Settings.Height) 
@@ -21,13 +22,14 @@ namespace GameCode
             mapUI = new MapUI();
             map = new Map();
             mapDrawer = new MapDrawer();
+            inventoryMenu = new InventoryMenu();
 
             IsMouseVisible = false;
         }
 
         protected override void LoadContent()
         {
-            Settings.Load(Content);
+            Settings.Load(Content, GraphicsDevice);
             sb = new SpriteBatch(GraphicsDevice);
             map.Generate();
             Input = new Input();
@@ -35,34 +37,49 @@ namespace GameCode
 
         protected override void Update(GameTime gameTime)
         {
-
             Input.Update();
-
-            if (Input.IsDown(Keys.LeftControl))
-            {
-                if (Input.WasPressed(Keys.OemPlus))
-                {
-                    if (Settings.TileSize < 48)
-                    {                        
-                        Settings.TileSize += 16;
-                        Settings.MapWindowSize = Settings.MapPixelWidth / Settings.TileSize;
-                    }
-                }
-                else if (Input.WasPressed(Keys.OemMinus))
-                {
-                    if (Settings.TileSize > 16)
-                    {
-                        Settings.TileSize -= 16;
-                        Settings.MapWindowSize = Settings.MapPixelWidth / Settings.TileSize;
-                    }
-                }
-            }
-
 
             if (Scene == "menu")
                 menu.Update(gameTime);
-            else
+            else if (Scene == "map")
+            {
+                if (Input.IsDown(Keys.LeftControl))
+                {
+                    if (Input.WasPressed(Keys.OemPlus))
+                    {
+                        if (Settings.TileSize < 48)
+                        {
+                            Settings.TileSize += 16;
+                            Settings.MapWindowSize = Settings.MapPixelWidth / Settings.TileSize;
+                        }
+                    }
+                    else if (Input.WasPressed(Keys.OemMinus))
+                    {
+                        if (Settings.TileSize > 16)
+                        {
+                            Settings.TileSize -= 16;
+                            Settings.MapWindowSize = Settings.MapPixelWidth / Settings.TileSize;
+                        }
+                    }
+                }
+                
                 map.Player.Update(this, map, gameTime);
+
+                if (Input.WasPressed(Keys.I))
+                {
+                    Scene = "inventory";
+                }
+                
+            }
+            else if (Scene == "inventory")
+            {
+                if (Input.WasPressed(Keys.Escape))
+                {
+                    Scene = "map";
+                }
+
+                inventoryMenu.Update(Input, map);
+            }
 
         }
 
@@ -81,11 +98,15 @@ namespace GameCode
 
             if (Scene == "menu")
                 menu.Draw(sb);
-            else
+            else if (Scene == "map")
             {
                 var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 mapDrawer.Draw(this, map, sb);
                 mapUI.Draw(this, sb, dt, map);
+            }
+            else if (Scene == "inventory")
+            {
+                inventoryMenu.Draw(sb, map);
             }
 
             sb.End();
