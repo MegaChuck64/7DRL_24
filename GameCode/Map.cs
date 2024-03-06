@@ -94,28 +94,45 @@ public class Map
         var startTile = GetRandomEmptyTileInRange(10, Settings.MapSize / 2, Settings.MapSize / 2);
         Player = new Player(startTile.X, startTile.Y);
 
-        PlaceWelcomeScroll();
+        PlaceItemInRange(5, Player.X, Player.Y, new Tile
+        {
+            SpriteName = "Scroll",
+            Option = GetRandomSpriteOption("Scroll"),
+            Data = new List<string> 
+            { 
+                "Object", 
+                "Collectable", 
+                $"Description-{Settings.WelcomeMessage}" 
+            }
+        });
+
+        PlaceItemInRange(5, Player.X, Player.Y, new Tile
+        {
+            SpriteName = "Axe",
+            Option = 0,
+            Data = new List<string>()
+            {
+                "Collectable",
+                "Object",
+                "Weapon",
+                "Description-Basic wooden axe. \nCan be used to chop down trees."
+            }
+        });
     }
 
-    private void PlaceWelcomeScroll()
+    private void PlaceItemInRange(int range, int centerX, int centerY, Tile tile)
     {
-        var choice = GetRandomEmptyTileInRange(5, Player.X, Player.Y);
+        var choice = GetRandomEmptyTileInRange(range, centerX, centerY);
 
-        var path = PathFinder.GetPath(new Point(Player.X, Player.Y), new Point(choice.X, choice.Y), GetCollisionMap(this));
+        var path = PathFinder.GetPath(new Point(centerX, centerY), new Point(choice.X, choice.Y), GetCollisionMap(this));
         if (path == null || path.Count == 0)
         {
             throw new Exception("Todo: can't reach chosen grass");
         }
+        tile.X = choice.X;
+        tile.Y = choice.Y;
 
-        var scrollTile = new Tile()
-        {
-            X = choice.X,
-            Y = choice.X,
-            SpriteName = "Scroll",
-            Option = GetRandomSpriteOption("Scroll"),
-            Data = new List<string> { "Object", "Collectable", $"Description-{Settings.WelcomeMessage}"}
-        };
-        Items.Add(scrollTile);
+        Items.Add(tile);
     }
 
     private Tile GetRandomEmptyTileInRange(int range, int x, int y)

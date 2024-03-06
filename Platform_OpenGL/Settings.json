@@ -44,7 +44,11 @@
     "Sprites/item/scroll/scroll-grey",
     "Sprites/item/scroll/scroll-purple",
     "Sprites/item/scroll/scroll-red",
-    "Sprites/item/scroll/scroll-yellow"
+    "Sprites/item/scroll/scroll-yellow",
+
+    "Sprites/item/weapon/hand_axe1",
+    "Sprites/item/weapon/hand_axe2",
+    "Sprites/item/weapon/hand_axe3"
   ],                            
                                 
   "Sprites": {
@@ -91,6 +95,11 @@
       "scroll-purple",
       "scroll-red",
       "scroll-yellow"
+    ],
+    "Axe": [
+      "hand_axe1",
+      "hand_axe2",
+      "hand_axe3"
     ]
   }
 
