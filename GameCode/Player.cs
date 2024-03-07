@@ -74,6 +74,29 @@ public class Player : Actor
                 next = path.First();
             }
         }
+        else if (map.SelectedTile != null && game.Input.WasPressed(Input.MouseButton.Right))
+        {
+            if (map.SelectedTile.SpriteName == "Tree" && GetSelectedInventoryItem()?.SpriteName == "Axe")
+            {
+                map.Items.Remove(map.SelectedTile);
+                map.Items.Add(new Tile
+                {
+                    X = map.SelectedTile.X,
+                    Y = map.SelectedTile.Y,
+                    Data = new List<string>
+                    {
+                        "Collectable",
+                        "Object",
+                        "Description-Wood. Used to build stuff."
+                    },
+                    Option = 0,
+                    SpriteName = "Logs"                    
+                });
+
+                map.SelectedTile = null;
+            }
+        }
+
         if (next != new Point(X, Y))
         {
             if (next.X < Settings.MapSize && next.Y < Settings.MapSize && next.X >= 0 && next.Y >= 0)

@@ -48,7 +48,9 @@
 
     "Sprites/item/weapon/hand_axe1",
     "Sprites/item/weapon/hand_axe2",
-    "Sprites/item/weapon/hand_axe3"
+    "Sprites/item/weapon/hand_axe3",
+
+    "Sprites/item/logs"
   ],                            
                                 
   "Sprites": {
@@ -100,6 +102,9 @@
       "hand_axe1",
       "hand_axe2",
       "hand_axe3"
+    ],
+    "Logs": [
+      "logs"
     ]
   }
 

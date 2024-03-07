@@ -4486,6 +4486,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/floor/white_marble9.png
 
+#begin Sprites/item/logs.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/item/logs.png
+
 #begin Sprites/item/scroll/scroll-blue.png
 /importer:TextureImporter
 /processor:TextureProcessor
