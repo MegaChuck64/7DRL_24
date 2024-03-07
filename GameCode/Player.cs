@@ -7,6 +7,13 @@ using System.Linq;
 
 namespace GameCode;
 
+/*
+ * todo:
+ * refactor crafting system to generate from settings file
+ * add enemies
+ * add spells/range
+ *
+ */
 public class Player : Actor
 {
     private readonly Texture2D _texture;
