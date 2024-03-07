@@ -14,6 +14,7 @@ namespace GameCode
         private MapDrawer mapDrawer;
         private MapUI mapUI;
         private InventoryMenu inventoryMenu;
+        private CraftMenu craftMenu;
         public Input Input;
         public string Scene = "menu";
         public MainGame () : base(Settings.Width, Settings.Height) 
@@ -23,6 +24,7 @@ namespace GameCode
             map = new Map();
             mapDrawer = new MapDrawer();
             inventoryMenu = new InventoryMenu();
+            craftMenu = new CraftMenu();
 
             IsMouseVisible = false;
         }
@@ -69,6 +71,10 @@ namespace GameCode
                 {
                     Scene = "inventory";
                 }
+                else if (Input.WasPressed(Keys.C))
+                {
+                    Scene = "craft";
+                }
                 
             }
             else if (Scene == "inventory")
@@ -79,6 +85,14 @@ namespace GameCode
                 }
 
                 inventoryMenu.Update(Input, map);
+            }
+            else if (Scene =="craft")
+            {
+                if (Input.WasPressed(Keys.Escape))
+                {
+                    Scene = "map";
+                }
+                craftMenu.Update(Input, map);
             }
 
         }
@@ -107,6 +121,10 @@ namespace GameCode
             else if (Scene == "inventory")
             {
                 inventoryMenu.Draw(sb, map, Input);
+            }
+            else if (Scene == "craft")
+            {
+                craftMenu.Draw(sb, map, Input);
             }
 
             sb.End();

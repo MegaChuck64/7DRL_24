@@ -35,7 +35,7 @@ public class MapUI
         var inventory = map.Player.Inventory;
         var y = (healthSize.Y + 4 + 2) * 2;
         var invPos = new Vector2((Settings.MapWindowSize * Settings.TileSize) + 2, y);
-        sb.DrawString(font8, "~ ~ Inventory ~ ~", invPos, Color.White);
+        sb.DrawString(font8, "~ ~ Inventory (i)~ ~", invPos, Color.White);
         var cnt = 1;
         foreach (var item in inventory)
         {                        
@@ -72,6 +72,14 @@ public class MapUI
             var taskText = "Chop Tree";
             actionPos.Y += actionSize.Y + 8;
             sb.DrawString(font12, taskText, actionPos, Color.Green);
+        }
+
+        if (map.Player.GetCraftableItems().Count > 0)
+        {
+            var craftText = "- Craft (c) -";
+            var craftSize = font12.MeasureString(craftText);
+            var craftPos = new Vector2(healthPos.X, healthPos.Y - (((craftSize.Y * 2) - 16 ) * 8));
+            sb.DrawString(font12, craftText, craftPos, Color.Green);
         }
 
     }

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace GameCode;
@@ -38,7 +39,12 @@ public class InventoryMenu
     {
         var font12 = Settings.Fonts["font_12"];
         var font8 = Settings.Fonts["font_8"];
-        
+
+        var escText = "esc";
+        var escSize = font8.MeasureString(escText);
+        var escPos = new Vector2(8, Settings.Height - escSize.Y - 4);
+        sb.DrawString(font8, escText, escPos, Color.LightGray);
+
         var titleText = "~ ~ Inventory ~ ~";
         var titleSize = font12.MeasureString(titleText);
         var x = GetLeftPaneRect.Center.X - (titleSize.X / 2);

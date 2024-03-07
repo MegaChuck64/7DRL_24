@@ -48,6 +48,51 @@ public class Player : Actor
 
         return null;
     }
+
+    public List<Tile> GetCraftableItems()
+    {
+        var items = new List<Tile>();
+
+        if (CanCraftAxe())
+        {
+            items.Add(new Tile
+            {
+                SpriteName = "Axe",
+                Option = 0,
+                Data = new List<string>()
+                {
+                    "Collectable",
+                    "Object",
+                    "Weapon"
+                },
+            });
+        }
+
+        if (CanCraftSword())
+        {
+            items.Add(new Tile
+            {
+                SpriteName = "Sword",
+                Option = 0,
+                Data = new List<string>()
+                {
+                    "Collectable",
+                    "Object",
+                    "Weapon"
+                },
+            });
+        }
+
+        return items;
+    }
+
+    public bool CanCraftAxe() => 
+        Inventory.Count(t => t.SpriteName == "Logs") >= 2;
+
+    public bool CanCraftSword() =>
+        Inventory.Count(t => t.SpriteName == "Logs") >= 3;
+    
+    
     public void Draw(Rectangle dst, SpriteBatch sb)
     {
         sb.Draw(
