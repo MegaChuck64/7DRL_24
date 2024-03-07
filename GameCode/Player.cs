@@ -39,6 +39,15 @@ public class Player : Actor
         return false;
     }
 
+    public Tile GetSelectedInventoryItem()
+    {
+        if (Inventory.Count > SelectedItem)
+        {
+            return Inventory[SelectedItem];
+        }
+
+        return null;
+    }
     public void Draw(Rectangle dst, SpriteBatch sb)
     {
         sb.Draw(

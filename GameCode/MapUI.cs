@@ -59,5 +59,20 @@ public class MapUI
             var cursorText = Settings.Textures["halo"];
             sb.Draw(cursorText, mousePos.ToVector2(), Color.White);
         }
+
+
+        if (map.SelectedTile?.SpriteName == "Tree" && 
+            map.Player.GetSelectedInventoryItem()?.SpriteName == "Axe" && 
+            Vector2.Distance(new Vector2(map.SelectedTile.X, map.SelectedTile.Y), new Vector2(map.Player.X, map.Player.Y)) < 2)
+        {
+            var actionText = $"- Right Click -";
+            var actionSize = font12.MeasureString(actionText);
+            var actionPos = new Vector2(healthPos.X, healthPos.Y - (actionSize.Y * 2) - 16);
+            sb.DrawString(font12, actionText, actionPos, Color.Green);
+            var taskText = "Chop Tree";
+            actionPos.Y += actionSize.Y + 8;
+            sb.DrawString(font12, taskText, actionPos, Color.Green);
+        }
+
     }
 }

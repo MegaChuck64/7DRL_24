@@ -106,7 +106,7 @@ namespace GameCode
             }
             else if (Scene == "inventory")
             {
-                inventoryMenu.Draw(sb, map);
+                inventoryMenu.Draw(sb, map, Input);
             }
 
             sb.End();

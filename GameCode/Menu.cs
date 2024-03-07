@@ -32,5 +32,10 @@ public class Menu
         titleX -= (int)(titleSize.X / 2f);
         titleY -= (int)(titleSize.Y / 2f);
         sb.DrawString(font, title, new Vector2(titleX, titleY), Color.White);
+
+
+        var mousePos = _game.Input.MouseState.Position;
+        var txt = Settings.Textures["halo"];
+        sb.Draw(txt, mousePos.ToVector2(), Color.White);
     }
 }

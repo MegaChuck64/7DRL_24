@@ -34,7 +34,7 @@ public class InventoryMenu
             }
         }
     }
-    public void Draw(SpriteBatch sb, Map map)
+    public void Draw(SpriteBatch sb, Map map, Input input)
     {
         var font12 = Settings.Fonts["font_12"];
         var font8 = Settings.Fonts["font_8"];
@@ -83,6 +83,10 @@ public class InventoryMenu
                 }
             }
         }
+
+        var mousePos = input.MouseState.Position;
+        var mouseTxt = Settings.Textures["halo"];
+        sb.Draw(mouseTxt, mousePos.ToVector2(), Color.White);
         
     }
 }
