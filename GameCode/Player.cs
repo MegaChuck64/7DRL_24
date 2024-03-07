@@ -11,6 +11,10 @@ public class Player : Actor
 {
     private readonly Texture2D _texture;
     public List<Tile> Inventory { get; private set; }
+
+    public int SelectedItem { get; private set; }
+
+
     public Player(int x, int y)
     {
         var rand = new Random();
@@ -89,6 +93,23 @@ public class Player : Actor
                 
 
                  
+            }
+        }
+
+        var pressedKeys = game.Input.KeyState.GetPressedKeys();
+        foreach (var key in pressedKeys.Where(k => (int)k >= 48 && (int)k <= 57))
+        {
+            var val = (int)key - 48;
+            if (val == 0)
+                val = 10;
+
+            val--;
+            //a b c
+            //  1
+
+            if (map.Player.Inventory.Count > val)
+            {
+                SelectedItem = val;
             }
         }
 

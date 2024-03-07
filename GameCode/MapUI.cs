@@ -38,11 +38,13 @@ public class MapUI
         sb.DrawString(font8, "~ ~ Inventory ~ ~", invPos, Color.White);
         var cnt = 1;
         foreach (var item in inventory)
-        {
-            var invTx = $"{cnt++}. {item.SpriteName}";
+        {                        
+            var invTx = $"{cnt}. {item.SpriteName}";
             y += healthSize.Y + 4 + 2;
             invPos.Y = y;
-            sb.DrawString(font8, invTx, invPos, Color.White);
+            sb.DrawString(font8, invTx, invPos, cnt-1 == map.Player.SelectedItem ? Color.Yellow : Color.White);
+
+            cnt++;
         }
 
         var uiRect = new Rectangle(
