@@ -9,9 +9,8 @@ namespace GameCode;
 
 /*
  * todo:
- * refactor crafting system to generate from settings file
  * add enemies
- * add spells/range
+ * add spells
  *
  */
 public class Player : Actor

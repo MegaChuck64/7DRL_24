@@ -68,7 +68,7 @@ public class Map
                 }
                 else if (_rand.NextDouble() > 0.95f)
                 {
-                    var tree = Settings.CreateItem("Tree", GetRandomSpriteOption("Tree"), x, y); //todo
+                    var tree = Settings.CreateItem("Tree", GetRandomSpriteOption("Tree"), x, y);
                     Items.Add(tree);
                 }
 
