@@ -62,7 +62,7 @@ public class MapDrawer
             if (winRect.Contains(tile.X + Offset.X, tile.Y + Offset.Y))
             {
                 var tileSpr = Settings.Sprites[tile.SpriteName];
-                var layer = tile.Data.Contains("Object") ? 0.2f : 0.1f;
+                var layer = 0.1f;
                 
                 //tiles
                 if (tileSpr != null)
@@ -120,7 +120,7 @@ public class MapDrawer
 
                 var itmSpr = Settings.Sprites[item.SpriteName];
                 var itmTxt = Settings.Textures[itmSpr[item.Option]];
-                var layer = item.Data.Contains("Object") ? 0.2f : 0.1f;
+                var layer = 0.2f;
 
                 sb.Draw(
                   texture: itmTxt,

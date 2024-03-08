@@ -17,10 +17,6 @@ namespace GameCode;
 public class Player : Actor
 {
     private readonly Texture2D _texture;
-    public List<Tile> Inventory { get; private set; }
-
-    public int SelectedItem { get; private set; }
-
 
     public Player(int x, int y)
     {
@@ -31,11 +27,10 @@ public class Player : Actor
         X = x;// Settings.MapSize / 2;
         Y = y;// Settings.MapSize / 2;
 
-        Inventory = new List<Tile>();        
         Health = 20;
     }
 
-    public bool TryAddInventoryItem(Tile item)
+    public bool TryAddInventoryItem(Item item)
     {
         if (Inventory.Count < 10)
         {
@@ -56,38 +51,18 @@ public class Player : Actor
         return null;
     }
 
-    public List<Tile> GetCraftableItems()
+    public List<Item> GetCraftableItems()
     {
-        var items = new List<Tile>();
+        var items = new List<Item>();
 
         if (CanCraftAxe())
         {
-            items.Add(new Tile
-            {
-                SpriteName = "Axe",
-                Option = 0,
-                Data = new List<string>()
-                {
-                    "Collectable",
-                    "Object",
-                    "Weapon"
-                },
-            });
+            items.Add(Settings.CreateItem("Axe", 0));
         }
 
         if (CanCraftSword())
         {
-            items.Add(new Tile
-            {
-                SpriteName = "Sword",
-                Option = 0,
-                Data = new List<string>()
-                {
-                    "Collectable",
-                    "Object",
-                    "Weapon"
-                },
-            });
+            //items.Add(Settings.CreateItem("Sword", 0));
         }
 
         return items;
@@ -118,7 +93,7 @@ public class Player : Actor
     {
 
         var next = new Point(X, Y);
-        if (map.SelectedTile != null && game.Input.WasPressed(Input.MouseButton.Left) && !map.SelectedTile.Data.Contains("Collider"))
+        if (map.SelectedTile != null && game.Input.WasPressed(Input.MouseButton.Left) && !map.SelectedTile.Collider)
         {
             var path = PathFinder.GetPath(next, new Point(map.SelectedTile.X, map.SelectedTile.Y), Map.GetCollisionMap(map));
             if (path != null && path.Count > 0)
@@ -128,22 +103,16 @@ public class Player : Actor
         }
         else if (map.SelectedTile != null && game.Input.WasPressed(Input.MouseButton.Right))
         {
-            if (map.SelectedTile.SpriteName == "Tree" && GetSelectedInventoryItem()?.SpriteName == "Axe")
+            var selectedInventoryItem = GetSelectedInventoryItem();
+            if (map.SelectedTile.SpriteName == "Tree" &&
+                selectedInventoryItem?.SpriteName == "Axe" &&
+                (int)Vector2.Distance(
+                    new Vector2(map.SelectedTile.X, map.SelectedTile.Y), 
+                    new Vector2(map.Player.X, map.Player.Y)) <=
+                    (selectedInventoryItem as Weapon).Range) 
             {
-                map.Items.Remove(map.SelectedTile);
-                map.Items.Add(new Tile
-                {
-                    X = map.SelectedTile.X,
-                    Y = map.SelectedTile.Y,
-                    Data = new List<string>
-                    {
-                        "Collectable",
-                        "Object",
-                        "Description-Wood. Used to build stuff."
-                    },
-                    Option = 0,
-                    SpriteName = "Logs"                    
-                });
+                map.Items.Remove(map.SelectedTile as Item);
+                map.Items.Add(Settings.CreateItem("Logs", 0, map.SelectedTile.X, map.SelectedTile.Y));
 
                 map.SelectedTile = null;
             }
@@ -153,13 +122,13 @@ public class Player : Actor
         {
             if (next.X < Settings.MapSize && next.Y < Settings.MapSize && next.X >= 0 && next.Y >= 0)
             {
-                if (!map.Tiles[X, Y].Data.Contains("Collider") &&
-                    !map.Items.Any(t => t.X == X && t.Y == Y && t.Data.Contains("Collider")))
+                if (!map.Tiles[X, Y].Collider &&
+                    !map.Items.Any(t => t.X == X && t.Y == Y && t.Collider))
                 {
                     X = next.X;
                     Y = next.Y;
 
-                    var collectables = map.Items.Where(t => t.X == X && t.Y == Y && t.Data.Contains("Collectable"));
+                    var collectables = map.Items.Where(t => t.X == X && t.Y == Y && t.Collectable);
                     var removables = new List<Tile>();
                     if (collectables.Any())
                     {

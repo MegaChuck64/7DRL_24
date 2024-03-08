@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Globalization;
 using System.Linq;
 
 namespace GameCode;
@@ -76,17 +75,15 @@ public class InventoryMenu
 
             sb.DrawString(font12, nameText, new Vector2(x, y), Color.White);
 
-            if (item.Data.Any(t=>t.StartsWith("Description-")))
+            var itemInfo = Settings.Items[item.SpriteName];            
+            var lines = itemInfo.Description.Split('\n', 
+                StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var line in lines)
             {
-                var data = item.Data.First(t => t.StartsWith("Description-"));
-                var desc = data.Split("Description-", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)[0];
-                var lines = desc.Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-                foreach (var line in lines)
-                {
-                    y += (int)nameSize.Y + 8;
-                    x = GetRightPaneRect.X + 48;
-                    sb.DrawString(font8, line, new Vector2(x, y), Color.LightGray);
-                }
+                y += (int)nameSize.Y + 8;
+                x = GetRightPaneRect.X + 48;
+                sb.DrawString(font8, line, new Vector2(x, y), Color.LightGray);
             }
         }
 

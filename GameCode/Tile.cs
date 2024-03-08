@@ -10,14 +10,28 @@ public class Tile
     public int Y { get; set; }
     public string SpriteName { get; set; }
     public int Option { get; set; }
-    public List<string> Data { get; set; } = new List<string>();
+    public bool Collider { get; set; }
 }
 
 public class Actor : Tile
 {
-    public string Name { get; set; }
     public int Health { get; set; }
 
+    public List<Item> Inventory { get; set; } = new List<Item>();
+
+    public int SelectedItem { get; set; }    
 }
+
+public class Item : Tile
+{
+    public string Description { get; set; }
+    public bool Collectable { get; set; }
+}
+
+public class Weapon : Item
+{
+    public int Range { get; set; } = 1;    
+}
+
 
 

@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace GameCode;
 
@@ -29,11 +29,15 @@ public static class Settings
     public static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
     public static Dictionary<string, List<string>> Sprites = new Dictionary<string, List<string>>();
     public static Dictionary<string, SpriteFont> Fonts = new Dictionary<string, SpriteFont>();
+    public static Dictionary<string, ItemDescription> Items = new Dictionary<string, ItemDescription>();
     public static void Init()
     {
         var fl = File.ReadAllText("Settings.json");
-
-        var json = JsonNode.Parse(fl);
+        
+        var json = JsonNode.Parse(fl, null, new JsonDocumentOptions()
+        {
+            CommentHandling = JsonCommentHandling.Skip,
+        });
 
         //global settings
         var globalSettings = json["GlobalSettings"];
@@ -43,7 +47,6 @@ public static class Settings
         Height = globalSettings["Height"].GetValue<int>();
         MapSize = globalSettings["MapSize"].GetValue<int>();
         MapWindowSize = globalSettings["MapWindowSize"].GetValue<int>();
-        WelcomeMessage = globalSettings["WelcomeMessage"].GetValue<string>();
         MapPixelWidth = MapWindowSize * TileSize;
     }
 
@@ -51,7 +54,10 @@ public static class Settings
     {
         var fl = File.ReadAllText("Settings.json");
 
-        var json = JsonNode.Parse(fl);
+        var json = JsonNode.Parse(fl, null, new JsonDocumentOptions()
+        {
+            CommentHandling = JsonCommentHandling.Skip,
+        });
         var textures = json["Textures"] as JsonArray;
         foreach (var spr in textures)
         {
@@ -65,6 +71,9 @@ public static class Settings
         var sprites = json["Sprites"];
         Sprites = sprites.Deserialize<Dictionary<string, List<string>>>();
 
+        var items = json["Items"];
+        Items = items.Deserialize<Dictionary<string, ItemDescription>>();
+
         Fonts.Add("font_18", content.Load<SpriteFont>(Path.Combine("Fonts", "font_18")));
         Fonts.Add("font_12", content.Load<SpriteFont>(Path.Combine("Fonts", "font_12")));
         Fonts.Add("font_8", content.Load<SpriteFont>(Path.Combine("Fonts", "font_8")));
@@ -73,4 +82,61 @@ public static class Settings
         txt.SetData(new Color[] { Color.White });
         Textures["pixel"] = txt;
     }
+
+    public static Item CreateItem(string name, int option, int x = 0, int y = 0)
+    {
+        var item = Items[name];
+        return item.Type switch
+        {
+            ItemType.Static => new Item
+            {
+                SpriteName = name,
+                Option = option,
+                Description = item.Description,
+                Collectable = false,
+                Collider = item.Collider,
+                X = x,
+                Y = y,
+            },
+            ItemType.Collectable => new Item
+            {
+                SpriteName = name,
+                Option = option,
+                Description = item.Description,
+                Collectable = true,
+                Collider = item.Collider,
+                X = x,
+                Y = y
+            },
+            ItemType.Weapon => new Weapon
+            {
+                SpriteName = name,
+                Option = option,
+                Collectable = true,
+                Description = item.Description,
+                Collider = item.Collider,
+                Range = int.Parse(item.Data["Range"]),
+                X = x,
+                Y = y
+            },
+            _ => throw new System.NotImplementedException(),
+        };
+    }
+}
+
+public class ItemDescription
+{
+    public string Description { get; set; }
+    public ItemType Type { get; set; } = ItemType.Collectable;
+    public string DisplayName { get; set; } = string.Empty;
+    public bool Collider { get; set; } = false;
+    public Dictionary<string, string> Data { get; set; } = new Dictionary<string, string>();
+}
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum ItemType
+{
+    Static,
+    Collectable,
+    Weapon,
 }

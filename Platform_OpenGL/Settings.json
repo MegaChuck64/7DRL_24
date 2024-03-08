@@ -1,14 +1,16 @@
 {
+  
+  //Global Settings ------------------------------------------
   "GlobalSettings": {
     "TileSize": 32,
     "SourceTileSize": 32,
     "Width": 1024,
     "Height": 768,
     "MapSize": 256,
-    "MapWindowSize": 24,
-    "WelcomeMessage": "Welcome to Hollow World! \nRoll to move around the map. \nBuy items in stores to help in fights.\nWinning fights will provide item drops."
+    "MapWindowSize": 24    
   },
-
+  
+  //Textures -------------------------------------------------
   "Textures": [
     "Sprites/water/shallow_water",
     "Sprites/water/shallow_water2",
@@ -52,7 +54,8 @@
 
     "Sprites/item/logs"
   ],                            
-                                
+                          
+  //Sprites --------------------------------------------------
   "Sprites": {
 
     "Water": [
@@ -87,8 +90,10 @@
       "cursor",
       "halo"
     ],
+    "Welcome Scroll": [
+      "scroll"
+    ],
     "Scroll": [
-      "scroll",
       "scroll-blue",
       "scroll-brown",
       "scroll-cyan",
@@ -106,6 +111,39 @@
     "Logs": [
       "logs"
     ]
+
+  },
+
+  //Items ----------------------------------------------------
+  "Items": {
+
+    "Welcome Scroll": {
+      "DisplayName": "Scroll",
+      "Type": "Collectable",
+      "Description": "Welcome to Hollow World! \nRoll to move around the map. \nBuy items in stores to help in fights.\nWinning fights will provide item drops.",
+      "Collider": false
+    },
+
+    "Tree": {
+      "Type": "Static",
+      "Description": "Tree",
+      "Collider": true
+    },
+
+    "Logs": {
+      "Type": "Collectable",
+      "Description": "Wood. Used to build stuff.",
+      "Collider": false
+    },
+
+    "Axe": {
+      "Type": "Weapon",
+      "Description": "Basic wooden axe. \nCan be used to chop down trees.",
+      "Collider": false,
+      "Data": {
+        "Range": "1"
+      }
+    }
   }
 
 }

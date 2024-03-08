@@ -120,44 +120,51 @@ namespace Engine
         private List<PathFinderNode> GetAdjacentWalkableNodes(PathFinderNode fromNode)
         {
             List<PathFinderNode> walkableNodes = new List<PathFinderNode>();
-            IEnumerable<Point> nextLocations = GetAdjacentLocations(fromNode.Location);
-
-            foreach (var location in nextLocations)
+            try
             {
-                int x = location.X;
-                int y = location.Y;
+                IEnumerable<Point> nextLocations = GetAdjacentLocations(fromNode.Location);
 
-                // Stay within the grid's boundaries
-                if (x < 0 || x >= this.width || y < 0 || y >= this.height)
-                    continue;
-
-                PathFinderNode node = this.nodes[x, y];
-                // Ignore non-walkable nodes
-                if (!node.IsWalkable)
-                    continue;
-
-                // Ignore already-closed nodes
-                if (node.State == PathFinderNodeState.Closed)
-                    continue;
-
-                // Already-open nodes are only added to the list if their G-value is lower going via this route.
-                if (node.State == PathFinderNodeState.Open)
+                foreach (var location in nextLocations)
                 {
-                    float traversalCost = PathFinderNode.GetTraversalCost(node.Location, node.ParentNode.Location);
-                    float gTemp = fromNode.G + traversalCost;
-                    if (gTemp < node.G)
+                    int x = location.X;
+                    int y = location.Y;
+
+                    // Stay within the grid's boundaries
+                    if (x < 0 || x >= this.width || y < 0 || y >= this.height)
+                        continue;
+
+                    PathFinderNode node = this.nodes[x, y];
+                    // Ignore non-walkable nodes
+                    if (!node.IsWalkable)
+                        continue;
+
+                    // Ignore already-closed nodes
+                    if (node.State == PathFinderNodeState.Closed)
+                        continue;
+
+                    // Already-open nodes are only added to the list if their G-value is lower going via this route.
+                    if (node.State == PathFinderNodeState.Open)
                     {
+                        float traversalCost = PathFinderNode.GetTraversalCost(node.Location, node.ParentNode.Location);
+                        float gTemp = fromNode.G + traversalCost;
+                        if (gTemp < node.G)
+                        {
+                            node.ParentNode = fromNode;
+                            walkableNodes.Add(node);
+                        }
+                    }
+                    else
+                    {
+                        // If it's untested, set the parent and flag it as 'Open' for consideration
                         node.ParentNode = fromNode;
+                        node.State = PathFinderNodeState.Open;
                         walkableNodes.Add(node);
                     }
                 }
-                else
-                {
-                    // If it's untested, set the parent and flag it as 'Open' for consideration
-                    node.ParentNode = fromNode;
-                    node.State = PathFinderNodeState.Open;
-                    walkableNodes.Add(node);
-                }
+            }
+            catch
+            {
+
             }
 
             return walkableNodes;

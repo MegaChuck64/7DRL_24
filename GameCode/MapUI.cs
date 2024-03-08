@@ -27,10 +27,18 @@ public class MapUI
 
         sb.DrawString(font12, healthText, healthPos, Color.White);
 
+        if (map.SelectedTile != null)
+        {
+            var tileInfoPos = new Vector2((Settings.MapWindowSize * Settings.TileSize) + 2, 4);
+            var displayName = map.SelectedTile.SpriteName;
+            if (map.SelectedTile is Item && !string.IsNullOrEmpty(Settings.Items[map.SelectedTile.SpriteName].DisplayName))
+            {
+                displayName = Settings.Items[map.SelectedTile.SpriteName].DisplayName;
+            }
 
-        var tileInfo = map.SelectedTile?.SpriteName ?? string.Empty;
-        var tileInfoPos = new Vector2((Settings.MapWindowSize * Settings.TileSize) + 2, 4);
-        sb.DrawString(font12, tileInfo, tileInfoPos, Color.Yellow);
+            sb.DrawString(font12, displayName, tileInfoPos, Color.Yellow);
+
+        }
 
         var inventory = map.Player.Inventory;
         var y = (healthSize.Y + 4 + 2) * 2;
@@ -61,18 +69,27 @@ public class MapUI
         }
 
 
-        if (map.SelectedTile?.SpriteName == "Tree" && 
-            map.Player.GetSelectedInventoryItem()?.SpriteName == "Axe" && 
-            Vector2.Distance(new Vector2(map.SelectedTile.X, map.SelectedTile.Y), new Vector2(map.Player.X, map.Player.Y)) < 2)
+        var selectedInventoryItem = map.Player.GetSelectedInventoryItem();
+        if (selectedInventoryItem != null && map.SelectedTile != null)
         {
-            var actionText = $"- Right Click -";
-            var actionSize = font12.MeasureString(actionText);
-            var actionPos = new Vector2(healthPos.X, healthPos.Y - (actionSize.Y * 2) - 16);
-            sb.DrawString(font12, actionText, actionPos, Color.Green);
-            var taskText = "Chop Tree";
-            actionPos.Y += actionSize.Y + 8;
-            sb.DrawString(font12, taskText, actionPos, Color.Green);
-        }
+            if (selectedInventoryItem.SpriteName == "Axe" && map.SelectedTile.SpriteName == "Tree")
+            {
+                if ((int)Vector2.Distance(
+                    new Vector2(map.SelectedTile.X, map.SelectedTile.Y),
+                    new Vector2(map.Player.X, map.Player.Y)) <= 
+                    (selectedInventoryItem as Weapon).Range)
+                {
+                    var actionText = $"- Right Click -";
+                    var actionSize = font12.MeasureString(actionText);
+                    var actionPos = new Vector2(healthPos.X, healthPos.Y - (actionSize.Y * 2) - 16);
+                    sb.DrawString(font12, actionText, actionPos, Color.Green);
+                    var taskText = "Chop Tree";
+                    actionPos.Y += actionSize.Y + 8;
+                    sb.DrawString(font12, taskText, actionPos, Color.Green);
+                }
+            }
+
+        }        
 
         if (map.Player.GetCraftableItems().Count > 0)
         {
