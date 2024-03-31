@@ -26,10 +26,26 @@ public static class Settings
     public static string WelcomeMessage = string.Empty;
     public static int MapPixelWidth { get; private set; }
 
+    /// <summary>
+    /// file name -> texture
+    /// </summary>
     public static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
+    /// <summary>
+    /// sprite name -> list of file names options
+    /// </summary>
     public static Dictionary<string, List<string>> Sprites = new Dictionary<string, List<string>>();
+    /// <summary>
+    /// file name -> font
+    /// </summary>
     public static Dictionary<string, SpriteFont> Fonts = new Dictionary<string, SpriteFont>();
+    /// <summary>
+    /// sprite name -> item information
+    /// </summary>
     public static Dictionary<string, ItemDescription> Items = new Dictionary<string, ItemDescription>();
+    /// <summary>
+    /// sprite name -> list of items needed to craft
+    /// </summary>
+    public static Dictionary<string, Dictionary<string, int>> Recipes = new Dictionary<string, Dictionary<string, int>>();
     public static void Init()
     {
         var fl = File.ReadAllText("Settings.json");
@@ -73,6 +89,9 @@ public static class Settings
 
         var items = json["Items"];
         Items = items.Deserialize<Dictionary<string, ItemDescription>>();
+
+        var recipes = json["Recipes"];
+        Recipes = recipes.Deserialize<Dictionary<string, Dictionary<string, int>>>();
 
         Fonts.Add("font_18", content.Load<SpriteFont>(Path.Combine("Fonts", "font_18")));
         Fonts.Add("font_12", content.Load<SpriteFont>(Path.Combine("Fonts", "font_12")));
@@ -169,6 +188,7 @@ public class ItemDescription
     public bool Collider { get; set; } = false;
     public Dictionary<string, string> Data { get; set; } = new Dictionary<string, string>();
 }
+
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ItemType

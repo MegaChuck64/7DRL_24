@@ -47,6 +47,51 @@ public class Player : Actor
         return false;
     }
 
+    public bool TryCraftItem(string itemName)
+    {
+        if (!CanCraftItem(itemName))
+            return false;
+
+        CraftItem(itemName);
+
+        return true;
+    }
+
+    private void CraftItem(string itemName)
+    {
+        var recipe = Settings.Recipes[itemName];
+        var removables = new List<string>();
+        foreach (var ingredient in recipe)
+        {
+            Inventory[ingredient.Key].Count -= ingredient.Value;
+
+            if (Inventory[ingredient.Key].Count < 1)
+                removables.Add(ingredient.Key);
+        }
+
+        foreach (var rem in removables)
+        {
+            Inventory.Remove(rem);
+        }
+
+        TryAddInventoryItem(Settings.CreateItem(itemName, 0));
+    }
+
+    public bool CanCraftItem(string itemName)
+    {
+        if (!Settings.Recipes.ContainsKey(itemName))
+            return false;
+
+        var recipe = Settings.Recipes[itemName];
+        foreach (var ingredient in recipe)
+        {
+            if (!Inventory.ContainsKey(ingredient.Key) || Inventory[ingredient.Key].Count < ingredient.Value)
+                return false;
+        }
+
+        return true;
+    }
+
     public Item GetSelectedInventoryItem()
     {
         if (Inventory.Count > SelectedItem)
@@ -57,30 +102,18 @@ public class Player : Actor
         return null;
     }
 
-    public List<Item> GetCraftableItems()
+    public List<string> GetCraftableItems()
     {
-        var items = new List<Item>();
+        var items = new List<string>();
 
-        if (CanCraftAxe())
+        foreach (var item in Settings.Recipes)
         {
-            items.Add(Settings.CreateItem("Axe", 0));
-        }
-
-        if (CanCraftSword())
-        {
-            items.Add(Settings.CreateItem("Sword", 0));
+            if (CanCraftItem(item.Key))
+                items.Add(item.Key);
         }
 
         return items;
     }
-
-    public bool CanCraftAxe() =>
-        Inventory.ContainsKey("Logs") && Inventory["Logs"].Count >= 2;
-     
-
-    public bool CanCraftSword() =>
-        Inventory.ContainsKey("Logs") && Inventory["Logs"].Count >= 3;
-
 
     public void Draw(Rectangle dst, SpriteBatch sb)
     {

@@ -35,23 +35,26 @@ public class CraftMenu
             }
         }
 
-        //if (selectedItem >= 0 && input.KeyState.IsKeyDown(Keys.Enter))
-        //{
-        //    var craftables = map.Player.GetCraftableItems();
-        //    if (craftables.Count > selectedItem)
-        //    {
-        //        var item = craftables[selectedItem];
-        //        map.Player.TryAddInventoryItem(item);
-        //    }
-        //    else if (craftables.Count == 0)
-        //    {
-        //        selectedItem = -1;
-        //    }
-        //    else
-        //    {
-        //        selectedItem = 0;
-        //    }
-        //}
+        if (selectedItem >= 0 && input.WasPressed(Keys.Enter))
+        {
+            var craftables = map.Player.GetCraftableItems();
+            if (craftables.Count > selectedItem)
+            {
+                var item = craftables[selectedItem];
+                if (map.Player.TryCraftItem(item))
+                {
+                    selectedItem = -1;
+                }
+            }
+            else if (craftables.Count == 0)
+            {
+                selectedItem = -1;
+            }
+            else
+            {
+                selectedItem = 0;
+            }
+        }
     }
 
     public void Draw(SpriteBatch sb, Map map, Input input)
@@ -80,7 +83,7 @@ public class CraftMenu
             if (i == 10)
                 i = 0;
 
-            var txt = $"{i}. {item.SpriteName}";
+            var txt = $"{i}. {item}";
             var txtSize = font8.MeasureString(txt);
             y += (int)titleSize.Y + 8;
             sb.DrawString(font8, txt, new Vector2(x, y), selected ? Color.Yellow : Color.White);
@@ -91,14 +94,14 @@ public class CraftMenu
         if (selectedItem >= 0)
         {
             var item = craftableItems[selectedItem];
-            var nameText = $"- {item.SpriteName} -";
+            var nameText = $"- {item} -";
             var nameSize = font12.MeasureString(nameText);
             x = GetRightPaneRect.Center.X - (nameSize.X / 2);
             y = 48;
 
             sb.DrawString(font12, nameText, new Vector2(x, y), Color.White);
 
-            var itemInfo = Settings.Items[item.SpriteName];            
+            var itemInfo = Settings.Items[item];            
             var lines = itemInfo.Description.Split('\n', 
                 StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 
