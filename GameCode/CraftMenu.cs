@@ -1,6 +1,7 @@
 ﻿using Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Linq;
 namespace GameCode;
@@ -33,6 +34,24 @@ public class CraftMenu
                 selectedItem = val;
             }
         }
+
+        //if (selectedItem >= 0 && input.KeyState.IsKeyDown(Keys.Enter))
+        //{
+        //    var craftables = map.Player.GetCraftableItems();
+        //    if (craftables.Count > selectedItem)
+        //    {
+        //        var item = craftables[selectedItem];
+        //        map.Player.TryAddInventoryItem(item);
+        //    }
+        //    else if (craftables.Count == 0)
+        //    {
+        //        selectedItem = -1;
+        //    }
+        //    else
+        //    {
+        //        selectedItem = 0;
+        //    }
+        //}
     }
 
     public void Draw(SpriteBatch sb, Map map, Input input)
@@ -71,7 +90,7 @@ public class CraftMenu
         //------------------------ right panel
         if (selectedItem >= 0)
         {
-            var item = map.Player.Inventory[selectedItem];
+            var item = craftableItems[selectedItem];
             var nameText = $"- {item.SpriteName} -";
             var nameSize = font12.MeasureString(nameText);
             x = GetRightPaneRect.Center.X - (nameSize.X / 2);

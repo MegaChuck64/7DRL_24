@@ -20,6 +20,11 @@ public class Actor : Tile
     public List<Item> Inventory { get; set; } = new List<Item>();
 
     public int SelectedItem { get; set; }    
+
+    public int SightRange { get; set; }
+
+    public int Strength { get; set; }
+
 }
 
 public class Item : Tile
@@ -30,7 +35,12 @@ public class Item : Tile
 
 public class Weapon : Item
 {
-    public int Range { get; set; } = 1;    
+    public List<string> Actions { get; set; }
+}
+
+public class Monster : Actor
+{
+
 }
 
 

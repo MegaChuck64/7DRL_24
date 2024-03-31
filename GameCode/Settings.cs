@@ -33,7 +33,7 @@ public static class Settings
     public static void Init()
     {
         var fl = File.ReadAllText("Settings.json");
-        
+
         var json = JsonNode.Parse(fl, null, new JsonDocumentOptions()
         {
             CommentHandling = JsonCommentHandling.Skip,
@@ -115,12 +115,49 @@ public static class Settings
                 Collectable = true,
                 Description = item.Description,
                 Collider = item.Collider,
-                Range = int.Parse(item.Data["Range"]),
                 X = x,
                 Y = y
             },
             _ => throw new System.NotImplementedException(),
         };
+    }
+
+    public static void PerformAction(ActionType type, Map map, params (string name, object obj) [] args)
+    {
+        switch (type)
+        {
+            case ActionType.Chop:
+                PerformChop(map, args);
+                break;
+            case ActionType.BasicAttack:
+                PerformBasicAttack(args);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    private static void PerformChop(Map map, params (string name, object obj)[] args)
+    {
+        map.Items.Remove(map.SelectedTile as Item);
+        map.Items.Add(CreateItem("Logs", 0, map.SelectedTile.X, map.SelectedTile.Y));
+
+        map.SelectedTile = null;
+    }
+
+    private static void PerformBasicAttack((string name, object obj)[] args)
+    {
+        var attackerObj = args.FirstOrDefault(t => t.name == "attacker");
+        var attackedObj = args.FirstOrDefault(t => t.name == "attacked");
+
+        if (attackerObj.obj is not Actor attacker)
+            return;
+
+        if (attackedObj.obj is not Actor attacked)
+            return;
+
+        attacked.Health -= attacker.Strength;
     }
 }
 
@@ -139,4 +176,10 @@ public enum ItemType
     Static,
     Collectable,
     Weapon,
+}
+
+public enum ActionType
+{
+    Chop,
+    BasicAttack,
 }

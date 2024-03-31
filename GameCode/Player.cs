@@ -61,7 +61,7 @@ public class Player : Actor
 
         if (CanCraftSword())
         {
-            //items.Add(Settings.CreateItem("Sword", 0));
+            items.Add(Settings.CreateItem("Sword", 0));
         }
 
         return items;
@@ -108,7 +108,7 @@ public class Player : Actor
                 (int)Vector2.Distance(
                     new Vector2(map.SelectedTile.X, map.SelectedTile.Y), 
                     new Vector2(map.Player.X, map.Player.Y)) <=
-                    (selectedInventoryItem as Weapon).Range) 
+                    float.Parse(Settings.Items["Axe"].Data["Range"])) 
             {
                 map.Items.Remove(map.SelectedTile as Item);
                 map.Items.Add(Settings.CreateItem("Logs", 0, map.SelectedTile.X, map.SelectedTile.Y));

@@ -1,5 +1,5 @@
 {
-  
+
   //Global Settings ------------------------------------------
   "GlobalSettings": {
     "TileSize": 32,
@@ -7,9 +7,9 @@
     "Width": 1024,
     "Height": 768,
     "MapSize": 256,
-    "MapWindowSize": 24    
+    "MapWindowSize": 24
   },
-  
+
   //Textures -------------------------------------------------
   "Textures": [
     "Sprites/water/shallow_water",
@@ -52,9 +52,16 @@
     "Sprites/item/weapon/hand_axe2",
     "Sprites/item/weapon/hand_axe3",
 
-    "Sprites/item/logs"
-  ],                            
-                          
+    "Sprites/item/weapon/greatsword1",
+    "Sprites/item/weapon/greatsword3",
+
+    "Sprites/item/logs",
+
+    "Sprites/monsters/ghost",
+    "Sprites/monsters/orc"
+
+  ],
+
   //Sprites --------------------------------------------------
   "Sprites": {
 
@@ -108,8 +115,20 @@
       "hand_axe2",
       "hand_axe3"
     ],
+
+    "Sword": [
+      "greatsword1",
+      "greatsword3"
+    ],
+
     "Logs": [
       "logs"
+    ],
+    "Ghost": [
+      "ghost"
+    ],
+    "Orc": [
+      "orc"
     ]
 
   },
@@ -141,9 +160,57 @@
       "Description": "Basic wooden axe. \nCan be used to chop down trees.",
       "Collider": false,
       "Data": {
-        "Range": "1"
+        "Range": "1",
+        "StrengthMod": "1.5"
+      }
+    },
+
+    "Sword": {
+      "Type": "Weapon",
+      "Description": "Basic steel sword. \nReally sharp.",
+      "Collider": false,
+      "Data": {
+        "Range": "1",
+        "StrengthMod": "2"
       }
     }
+
+  },
+
+  //Monsters -------------------------------------------------
+  "Monsters": {
+
+    "Ghost": {
+      "SightRange": 5,
+      "Health": 5,
+      "Strength": 5,
+      "Actions": [
+        {
+          "Name": "Basic Attack",
+          "Range": 1
+        }
+      ]
+    },
+
+    "Orc": {
+      "SightRange": 5,
+      "Health": 10,
+      "Strength": 5,
+      "Inventory": [
+        "Axe"
+      ],
+      "Actions": [
+        {
+          "Name": "Basic Attack",
+          "Range": 1
+        },
+        {
+          "Name": "Chop",
+          "Range": 1
+        }
+      ]
+    }
+
   }
 
 }

@@ -76,8 +76,8 @@ public class MapUI
             {
                 if ((int)Vector2.Distance(
                     new Vector2(map.SelectedTile.X, map.SelectedTile.Y),
-                    new Vector2(map.Player.X, map.Player.Y)) <= 
-                    (selectedInventoryItem as Weapon).Range)
+                    new Vector2(map.Player.X, map.Player.Y)) <=
+                    float.Parse(Settings.Items["Axe"].Data["Range"]))
                 {
                     var actionText = $"- Right Click -";
                     var actionSize = font12.MeasureString(actionText);
