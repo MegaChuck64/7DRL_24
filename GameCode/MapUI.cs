@@ -47,7 +47,7 @@ public class MapUI
         var cnt = 1;
         foreach (var item in inventory)
         {                        
-            var invTx = $"{cnt}. {item.SpriteName}";
+            var invTx = $"{cnt}. x{item.Value.Count} - {item.Key}";
             y += healthSize.Y + 4 + 2;
             invPos.Y = y;
             sb.DrawString(font8, invTx, invPos, cnt-1 == map.Player.SelectedItem ? Color.Yellow : Color.White);

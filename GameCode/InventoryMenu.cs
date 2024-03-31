@@ -58,7 +58,7 @@ public class InventoryMenu
             var selected = selectedItem == i - 1;
             if (i == 10)
                 i = 0;
-            var itemText = $"{i}.  {item.SpriteName}";
+            var itemText = $"{i}.  {item.Key}";
             var itemSize = font8.MeasureString(itemText);
             y += (int)titleSize.Y + 8;
             sb.DrawString(font8, itemText, new Vector2(x,y), selected ? Color.Yellow : Color.White);
@@ -67,7 +67,7 @@ public class InventoryMenu
         //------------------------ right panel
         if (selectedItem >= 0)
         {
-            var item = map.Player.Inventory[selectedItem];
+            var item = map.Player.Inventory.ElementAt(selectedItem).Value;
             var nameText = $"- {item.SpriteName} -";
             var nameSize = font12.MeasureString(nameText);
             x = GetRightPaneRect.Center.X - (nameSize.X / 2);

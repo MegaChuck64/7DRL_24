@@ -33,18 +33,25 @@ public class Player : Actor
     {
         if (Inventory.Count < 10)
         {
-            Inventory.Add(item);
+            if (Inventory.ContainsKey(item.SpriteName))
+            {
+                Inventory[item.SpriteName].Count++;
+            }
+            else
+            {
+                Inventory.Add(item.SpriteName, item);
+            }
             return true;
         }
 
         return false;
     }
 
-    public Tile GetSelectedInventoryItem()
+    public Item GetSelectedInventoryItem()
     {
         if (Inventory.Count > SelectedItem)
         {
-            return Inventory[SelectedItem];
+            return Inventory.ElementAt(SelectedItem).Value;
         }
 
         return null;
@@ -67,13 +74,14 @@ public class Player : Actor
         return items;
     }
 
-    public bool CanCraftAxe() => 
-        Inventory.Count(t => t.SpriteName == "Logs") >= 2;
+    public bool CanCraftAxe() =>
+        Inventory.ContainsKey("Logs") && Inventory["Logs"].Count >= 2;
+     
 
     public bool CanCraftSword() =>
-        Inventory.Count(t => t.SpriteName == "Logs") >= 3;
-    
-    
+        Inventory.ContainsKey("Logs") && Inventory["Logs"].Count >= 3;
+
+
     public void Draw(Rectangle dst, SpriteBatch sb)
     {
         sb.Draw(

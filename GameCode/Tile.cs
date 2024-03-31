@@ -17,7 +17,7 @@ public class Actor : Tile
 {
     public int Health { get; set; }
 
-    public List<Item> Inventory { get; set; } = new List<Item>();
+    public Dictionary<string, Item> Inventory { get; set; } = new Dictionary<string, Item>();
 
     public int SelectedItem { get; set; }    
 
@@ -31,6 +31,8 @@ public class Item : Tile
 {
     public string Description { get; set; }
     public bool Collectable { get; set; }
+
+    public int Count { get; set; } = 1;
 }
 
 public class Weapon : Item
